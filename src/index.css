@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+}
+h1 {
+  font-weight: 600;
+}
+a {
+  text-decoration: none;
+}
+
+@layer utilities {
+  .title {
+    font-size: xx-large;
+    text-align: center;
+    margin-bottom: 1.25rem;
+    font-weight: 800;
+  }
+}
+
+.join .join-item:not(:first-child):not(:last-child),
+.join *:not(:first-child):not(:last-child) .join-item {
+  border-radius: 0.5rem;
+}
