@@ -12,6 +12,7 @@ import FormInputField from '../form/FormInputField'
 import PasswordInputField from '../form/PasswordInputField'
 import ErrorText from '../ErrorText'
 import LoadingButton from '../LoadingButton'
+import { useNavigate } from 'react-router-dom'
 
 const validationSchema = yup.object({
   username: requiredStringSchema,
@@ -21,6 +22,7 @@ const validationSchema = yup.object({
 type LoginFormData = yup.InferType<typeof validationSchema>
 
 export default function Login() {
+  const navigate = useNavigate()
   const [errorText, setErrorText] = useState<string | null>(null)
 
   const {
@@ -77,12 +79,12 @@ export default function Login() {
                   >
                     Login
                   </LoadingButton>
-                  {/* <Link
-                    className="text-right hover:text-accent-focus underline"
-                    href={'/users/reset-password-request'}
+                  <a
+                    className="text-right hover:text-slate-600 underline cursor-pointer"
+                    onClick={() => navigate('/users/reset-password-request')}
                   >
                     Forgot password?
-                  </Link> */}
+                  </a>
                   {errorText && <ErrorText errorText={errorText} />}
                 </div>
               </form>
