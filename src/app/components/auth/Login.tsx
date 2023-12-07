@@ -1,18 +1,18 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
-import { requiredStringSchema } from '../../../utils/validation'
+import { useForm } from 'react-hook-form'
+import { Link, useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
-import * as UsersApi from '../../../lib/data/user.data'
+import useLogin from '../../../hooks/user/useLogin'
 import {
   TooManyRequestsError,
   UnauthorisedError,
 } from '../../../lib/http-errors'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import FormInputField from '../form/FormInputField'
-import PasswordInputField from '../form/PasswordInputField'
+import { requiredStringSchema } from '../../../utils/validation'
 import ErrorText from '../ErrorText'
 import LoadingButton from '../LoadingButton'
-import { useNavigate } from 'react-router-dom'
+import FormInputField from '../form/FormInputField'
+import PasswordInputField from '../form/PasswordInputField'
 
 const validationSchema = yup.object({
   username: requiredStringSchema,
@@ -23,6 +23,7 @@ type LoginFormData = yup.InferType<typeof validationSchema>
 
 export default function Login() {
   const navigate = useNavigate()
+  const { login } = useLogin()
   const [errorText, setErrorText] = useState<string | null>(null)
 
   const {
@@ -34,20 +35,19 @@ export default function Login() {
   })
 
   async function onSubmit(credentials: LoginFormData) {
-    try {
-      setErrorText(null)
-      await UsersApi.login(credentials)
-      //   router.push('/dashboard')
-    } catch (error) {
-      if (error instanceof UnauthorisedError) {
-        setErrorText('Invalid credentials')
-      } else if (error instanceof TooManyRequestsError) {
-        setErrorText('Too many requests, please try later.')
-      } else {
-        console.error(error)
-        alert(error)
-      }
-    }
+    setErrorText(null)
+    login(credentials, {
+      onSuccess: () => navigate('/dashboard'),
+      onError: (error) => {
+        if (error instanceof TooManyRequestsError) {
+          setErrorText('Too many requests')
+        } else if (error instanceof UnauthorisedError) {
+          setErrorText('Invalid credentials')
+        } else {
+          setErrorText(error.message)
+        }
+      },
+    })
   }
 
   return (
@@ -79,12 +79,12 @@ export default function Login() {
                   >
                     Login
                   </LoadingButton>
-                  <a
-                    className="text-right hover:text-slate-600 underline cursor-pointer"
-                    onClick={() => navigate('/users/reset-password-request')}
+                  <Link
+                    to={'/users/reset-password-request'}
+                    className="text-right hover:text-slate-600 underline"
                   >
                     Forgot password?
-                  </a>
+                  </Link>
                   {errorText && <ErrorText errorText={errorText} />}
                 </div>
               </form>

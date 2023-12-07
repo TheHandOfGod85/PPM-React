@@ -1,4 +1,3 @@
-import { ReactNode } from 'react'
 import {
   FaAlignJustify,
   FaHome,
@@ -7,17 +6,25 @@ import {
   FaUserFriends,
 } from 'react-icons/fa'
 import { FaArrowRightFromBracket } from 'react-icons/fa6'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { logout } from '../../lib/data/user.data'
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom'
+import useLogout from '../../hooks/user/useLogout'
+import useAuthenticatedUser from '../../hooks/user/useAuthenticatedUser'
 
 export default function SideBar() {
-  //   const { user } = useAuthenticatedUser()
   const { pathname } = useLocation()
+  const { logout } = useLogout()
+  const { currentUser: user } = useAuthenticatedUser()
   const navigate = useNavigate()
 
   const onLogout = async () => {
     try {
-      await logout()
+      logout()
       navigate('/')
     } catch (error) {
       console.error(error)
@@ -48,30 +55,30 @@ export default function SideBar() {
           <ul className="menu p-4 w-60 min-h-full bg-base-200 text-base-content font-semibold text-lg gap-2">
             {/* Sidebar content here */}
 
-            {/* {user && (
+            {user && (
               <h1 className="font-bold text-secondary">
                 Hello, {user.displayName}
               </h1>
-            )} */}
+            )}
 
             <li>
-              <a
-                href={'/dashboard'}
+              <Link
+                to={'/dashboard'}
                 className={pathname == '/dashboard' ? 'active' : ''}
               >
                 <FaHome /> Home
-              </a>
+              </Link>
             </li>
-            {/* {user?.role === 'admin' && ( */}
-            <li>
-              <a
-                href={'/dashboard/users'}
-                className={pathname == '/dshboard/users' ? 'active' : ''}
-              >
-                <FaUserFriends /> Users
-              </a>
-            </li>
-            {/* )} */}
+            {user?.role === 'admin' && (
+              <li>
+                <Link
+                  to={'/dashboard/users'}
+                  className={pathname == '/dshboard/users' ? 'active' : ''}
+                >
+                  <FaUserFriends /> Users
+                </Link>
+              </li>
+            )}
 
             <div className="dropdown dropdown-hover">
               <label tabIndex={0} className="btn text-[1.1rem] normal-case">
@@ -82,34 +89,36 @@ export default function SideBar() {
                 className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
               >
                 <li>
-                  <a
-                    href={'/dashboard/assets'}
+                  <Link
+                    to={'/dashboard/assets'}
                     className={pathname == '/dashboard/assets' ? 'active' : ''}
                   >
                     Assets List
-                  </a>
+                  </Link>
                 </li>
-                {/* {user?.role === 'admin' && ( */}
-                <li>
-                  <a
-                    href={'/dashboard/assets/new-asset'}
-                    className={
-                      pathname == '/dashboard/assets/new-asset' ? 'active' : ''
-                    }
-                  >
-                    New Asset
-                  </a>
-                </li>
-                {/* )} */}
+                {user?.role === 'admin' && (
+                  <li>
+                    <Link
+                      to={'/dashboard/assets/new-asset'}
+                      className={
+                        pathname == '/dashboard/assets/new-asset'
+                          ? 'active'
+                          : ''
+                      }
+                    >
+                      New Asset
+                    </Link>
+                  </li>
+                )}
               </ul>
             </div>
             <li className="absolute bottom-0 mb-4">
-              <a
-                href={'/dashboard/about'}
+              <Link
+                to={'/dashboard/about'}
                 className={pathname == '/dashboard/about' ? 'active' : ''}
               >
                 <FaQuestion /> About
-              </a>
+              </Link>
             </li>
             <li className="absolute bottom-8 mb-4">
               <button type="button" onClick={onLogout}>

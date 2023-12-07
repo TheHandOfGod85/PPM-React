@@ -1,29 +1,18 @@
-import { ComponentProps } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 interface GoBackButtonProps {
-  href?: string
+  href: string
   buttonName?: string
 }
 
-export default function GoBackButton({
-  href,
-  buttonName,
-  ...props
-}: GoBackButtonProps & ComponentProps<'button'>) {
-  const navigate = useNavigate()
-
+export default function GoBackButton({ href, buttonName }: GoBackButtonProps) {
   const isHref = href ? (
-    <button
-      onClick={() => navigate(href)}
-      {...props}
-      className="btn btn-primary mt-2 btn-sm"
-    >
+    <Link to={href} className="btn btn-primary mt-2 btn-sm">
       {buttonName ? buttonName : 'go back'}
-    </button>
+    </Link>
   ) : (
-    <button {...props} className="btn btn-primary mt-2 btn-sm">
+    <Link to={href} className="btn btn-primary mt-2 btn-sm">
       {buttonName ? buttonName : 'go back'}
-    </button>
+    </Link>
   )
   return isHref
 }

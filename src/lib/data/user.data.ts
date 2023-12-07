@@ -14,3 +14,11 @@ export async function login(credentials: LoginValues) {
 export async function logout() {
   await api.post('/user/logout')
 }
+
+export async function getAuthenticatedUser() {
+  const response = await api.get<User>('/user/me')
+  if (!response.data) {
+    return null
+  }
+  return response.data
+}

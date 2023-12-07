@@ -5,8 +5,20 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import Root from './app/routes/root'
 import ErrorPage from './app/components/error-page'
 import NotFoundPage from './app/components/not-found-page'
-import Dashboard from './app/routes/dashboard'
+import Dashboard from './app/routes/dashboardPage'
 import SideBar from './app/components/SideBar'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import AssetsPage from './app/routes/assetsPage'
+import About from './app/routes/aboutPage'
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60 * 1000,
+    },
+  },
+})
 
 const router = createBrowserRouter([
   { path: '/', element: <Root />, errorElement: <ErrorPage /> },
@@ -15,8 +27,16 @@ const router = createBrowserRouter([
     element: <SideBar />,
     children: [
       {
-        path: 'assets',
+        path: '',
         element: <Dashboard />,
+      },
+      {
+        path: 'assets',
+        element: <AssetsPage />,
+      },
+      {
+        path: 'about',
+        element: <About />,
       },
     ],
   },
@@ -25,6 +45,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools initialIsOpen={false} />
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </React.StrictMode>
 )

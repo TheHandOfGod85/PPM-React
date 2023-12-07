@@ -8,7 +8,7 @@ import {
 } from './http-errors'
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.PUBLIC_BACKEND_URL,
+  baseURL: import.meta.env.VITE_PUBLIC_BACKEND_URL,
   timeout: 5000,
   withCredentials: true,
 })
