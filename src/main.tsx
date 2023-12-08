@@ -11,6 +11,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import AssetsPage from './app/routes/assetsPage'
 import About from './app/routes/aboutPage'
+import AssetDetailsPage from './app/routes/assetDetailsPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: 'assets',
         element: <AssetsPage />,
+      },
+      {
+        path: 'assets/:assetId',
+        element: <AssetDetailsPage />,
       },
       {
         path: 'about',

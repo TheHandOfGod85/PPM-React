@@ -1,10 +1,10 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { FaEdit, FaTrash } from 'react-icons/fa'
+import { useMediaQuery } from 'react-responsive'
+import { Link, useLocation } from 'react-router-dom'
+import useDeleteAsset from '../../../hooks/asset/useDeleteAsset'
 import useAuthenticatedUser from '../../../hooks/user/useAuthenticatedUser'
 import { Asset } from '../../../lib/models/asset'
 import { formatDate, openModal } from '../../../utils/utils'
-import { useMediaQuery } from 'react-responsive'
-import { FaEdit, FaTrash } from 'react-icons/fa'
-import useDeleteAsset from '../../../hooks/asset/useDeleteAsset'
 import PopUpConfirm from '../PopUpConfirm'
 
 interface AssetsEntryProps {
@@ -15,7 +15,7 @@ export default function AssetEntry({
   asset: { name, description, createdAt, updatedAt, serialNumber, _id },
 }: AssetsEntryProps) {
   const { currentUser: user } = useAuthenticatedUser()
-  const { deleteAsset, isDeleting } = useDeleteAsset()
+  const { deleteAsset } = useDeleteAsset()
   const { pathname } = useLocation()
   const isMobile = useMediaQuery({ maxWidth: 640 })
 

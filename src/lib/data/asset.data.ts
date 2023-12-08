@@ -1,5 +1,5 @@
 import api from '../axiosInstance'
-import { AssetsPage } from '../models/asset'
+import { Asset, AssetsPage } from '../models/asset'
 
 export async function getAssets(page?: number, filter?: string) {
   if (filter && page) {
@@ -14,4 +14,9 @@ export async function getAssets(page?: number, filter?: string) {
 
 export async function deleteAsset(assetId: string) {
   await api.delete(`/assets/${assetId}`)
+}
+
+export async function getAsset(assetId: string) {
+  const response = await api.get<Asset>(`/assets/${assetId}`)
+  return response.data
 }
