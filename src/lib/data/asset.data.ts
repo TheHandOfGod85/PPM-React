@@ -11,3 +11,7 @@ export async function getAssets(page?: number, filter?: string) {
   const response = await api.get<AssetsPage>(`/assets?page=${page}`)
   return response.data
 }
+
+export async function deleteAsset(assetId: string) {
+  await api.delete(`/assets/${assetId}`)
+}
