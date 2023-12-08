@@ -24,7 +24,7 @@ export default function useAuthenticatedUser() {
     queryFn: () => UserApi.getAuthenticatedUser(),
   })
 
-  const isAuthenticated = currentUser?._id ? true : false
+  const isAuthenticated = x._id ? true : false
 
   return {
     isError,
