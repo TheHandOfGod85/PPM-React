@@ -1,18 +1,19 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import './index.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import Root from './pages/root'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import ErrorPage from './features/ui/error-page'
-import SideBar from './features/ui/SideBar'
-import Dashboard from './pages/dashboardPage'
-import AssetsPage from './pages/assetsPage'
-import AssetDetailsPage from './pages/assetDetailsPage'
-import About from './pages/aboutPage'
 import NotFoundPage from './features/ui/not-found-page'
+import SideBar from './features/ui/SideBar'
+import './index.css'
+import About from './pages/aboutPage'
+import AssetDetailsPage from './pages/assetDetailsPage'
+import AssetsPage from './pages/assetsPage'
+import Dashboard from './pages/dashboardPage'
 import NewAssetPage from './pages/newAssetPage'
+import NewPartPage from './pages/newPartPage'
+import Root from './pages/root'
 import UpdateAssetPage from './pages/updateAssetPage'
 
 const queryClient = new QueryClient({
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: 'assets/:assetId/edit-asset',
         element: <UpdateAssetPage />,
+      },
+      {
+        path: 'assets/:assetId/new-part',
+        element: <NewPartPage />,
       },
       {
         path: 'about',

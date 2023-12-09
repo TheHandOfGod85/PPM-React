@@ -1,5 +1,5 @@
 import api from '../../lib/axiosInstance'
-import { PartsPage } from './part.model'
+import { Part, PartsPage } from './part.model'
 
 export async function getPartsByAssetId(
   page: number = 1,
@@ -18,6 +18,26 @@ export async function getPartsByAssetId(
   return response.data
 }
 
-export async function deletePartAsset(partId: string) {
+export async function deletePart(partId: string) {
   await api.delete(`/part/${partId}`)
+}
+
+interface CreatePartValues {
+  name: string
+  description?: string
+  partNumber: string
+  manufacturer: string
+  partImage?: File
+}
+
+export async function createPartAsset(
+  input: CreatePartValues,
+  assetId: string
+) {
+  const formData = new FormData()
+  Object.entries(input).forEach(([key, value]) => {
+    formData.append(key, value)
+  })
+  const response = await api.post<Part>(`/assets/${assetId}/part`, formData)
+  return response.data
 }
