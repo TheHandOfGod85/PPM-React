@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import PaginationBar from '../PaginatorBar'
+import PaginationBar from '../../ui/PaginatorBar'
 
 interface AssetsPaginationBarProps {
   currentPage: number

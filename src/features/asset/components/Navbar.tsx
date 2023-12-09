@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import useAuthenticatedUser from '../../user/hooks/useAuthenticatedUser'
 import SearchAssets from './SearchAssets'
-import LoadingSpinner from '../LoadingSpinner'
+import LoadingSpinner from '../../ui/LoadingSpinner'
 
 export default function Navbar() {
   const { currentUser: user, isLoading } = useAuthenticatedUser()

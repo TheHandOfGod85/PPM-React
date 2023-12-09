@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import useAuthenticatedUser from '../../user/hooks/useAuthenticatedUser'
 import { Asset } from '../asset.model'
-import LoadingSpinner from '../LoadingSpinner'
+import LoadingSpinner from '../../ui/LoadingSpinner'
 
 interface NewPartButtonProps {
   asset: Asset

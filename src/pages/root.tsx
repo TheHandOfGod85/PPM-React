@@ -1,4 +1,4 @@
-import Login from '../components/auth/Login'
+import Login from "../features/auth/components/Login";
 
 export default function Root() {
   return <Login />

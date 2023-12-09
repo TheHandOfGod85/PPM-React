@@ -1,13 +1,14 @@
 import { useParams, useSearchParams } from 'react-router-dom'
 import useAsset from '../features/asset/hooks/useAsset'
 import usePartsByAssetId from '../features/part/hooks/usePartsByAssetId'
-import AssetEntry from '../components/assets/AssetEntry'
-import LoadingSpinner from '../components/LoadingSpinner'
-import NewPartButton from '../components/assets/NewPartButton'
-import GoBackButton from '../components/GoBackButton'
-import SearchParts from '../components/parts/SearchParts'
-import PartsTable from '../components/parts/PartsTable'
-import PartsPaginationBar from '../components/parts/PartsPaginationBar'
+import LoadingSpinner from '../features/ui/LoadingSpinner'
+import NewPartButton from '../features/asset/components/NewPartButton'
+import AssetEntry from '../features/asset/components/AssetEntry'
+import SearchParts from '../features/part/components/SearchParts'
+import PartsTable from '../features/part/components/PartsTable'
+import PartsPaginationBar from '../features/part/components/PartsPaginationBar'
+import GoBackButton from '../features/ui/GoBackButton'
+
 
 export default function AssetDetailsPage() {
   const [searchParams] = useSearchParams()

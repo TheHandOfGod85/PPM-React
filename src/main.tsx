@@ -2,16 +2,17 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Root from './app/pages/root'
-import ErrorPage from './app/components/error-page'
-import NotFoundPage from './app/components/not-found-page'
-import Dashboard from './app/pages/dashboardPage'
-import SideBar from './app/components/SideBar'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import AssetsPage from './app/pages/assetsPage'
-import About from './app/pages/aboutPage'
-import AssetDetailsPage from './app/pages/assetDetailsPage'
+import Root from './pages/root'
+import ErrorPage from './features/ui/error-page'
+import SideBar from './features/ui/SideBar'
+import Dashboard from './pages/dashboardPage'
+import AssetsPage from './pages/assetsPage'
+import AssetDetailsPage from './pages/assetDetailsPage'
+import About from './pages/aboutPage'
+import NotFoundPage from './features/ui/not-found-page'
+import NewAssetPage from './pages/newAssetPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: 'assets',
         element: <AssetsPage />,
+      },
+      {
+        path: 'assets/new-asset',
+        element: <NewAssetPage />,
       },
       {
         path: 'assets/:assetId',

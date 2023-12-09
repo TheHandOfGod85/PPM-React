@@ -6,8 +6,9 @@ import useDeletePart from '../hooks/useDeletePart'
 import useAuthenticatedUser from '../../user/hooks/useAuthenticatedUser'
 import { Part } from '../part.model'
 import { openModal } from '../../../utils/utils'
-import LoadingSpinner from '../LoadingSpinner'
-import PopUpConfirm from '../PopUpConfirm'
+import LoadingSpinner from '../../ui/LoadingSpinner'
+import PopUpConfirm from '../../ui/PopUpConfirm'
+
 
 interface PartsTableProps {
   parts: Part[]

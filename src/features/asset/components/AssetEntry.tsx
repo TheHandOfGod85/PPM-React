@@ -5,7 +5,7 @@ import useDeleteAsset from '../hooks/useDeleteAsset'
 import useAuthenticatedUser from '../../user/hooks/useAuthenticatedUser'
 import { Asset } from '../asset.model'
 import { formatDate, openModal } from '../../../utils/utils'
-import PopUpConfirm from '../PopUpConfirm'
+import PopUpConfirm from '../../ui/PopUpConfirm'
 
 interface AssetsEntryProps {
   asset: Asset
