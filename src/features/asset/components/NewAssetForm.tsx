@@ -21,7 +21,7 @@ type CreateAssetFormData = yup.InferType<typeof validationSchema>
 
 export default function NewAssetForm() {
   const navigate = useNavigate()
-  const { createAsset } = useCreateAsset()
+  const { createAsset, isCreating } = useCreateAsset()
   const [errorText, setErrorText] = useState<string | null>(null)
 
   const {
@@ -59,18 +59,21 @@ export default function NewAssetForm() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="join join-vertical w-full gap-5">
             <FormInputField
+              disabled={isCreating}
               register={register('name')}
               placeholder="Asset name"
               maxLength={100}
               error={errors.name}
             />
             <FormInputField
+              disabled={isCreating}
               placeholder="Asset description"
               register={register('description')}
               textarea
               maxLength={500}
             />
             <FormInputField
+              disabled={isCreating}
               register={register('serialNumber')}
               placeholder="Asset serial number"
               maxLength={500}

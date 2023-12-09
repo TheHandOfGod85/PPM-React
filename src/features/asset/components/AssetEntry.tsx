@@ -1,11 +1,11 @@
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { useMediaQuery } from 'react-responsive'
-import { Link, useLocation } from 'react-router-dom'
-import useDeleteAsset from '../hooks/useDeleteAsset'
-import useAuthenticatedUser from '../../user/hooks/useAuthenticatedUser'
-import { Asset } from '../asset.model'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { formatDate, openModal } from '../../../utils/utils'
 import PopUpConfirm from '../../ui/PopUpConfirm'
+import useAuthenticatedUser from '../../user/hooks/useAuthenticatedUser'
+import { Asset } from '../asset.model'
+import useDeleteAsset from '../hooks/useDeleteAsset'
 
 interface AssetsEntryProps {
   asset: Asset
@@ -15,6 +15,7 @@ export default function AssetEntry({
   asset: { name, description, createdAt, updatedAt, serialNumber, _id },
 }: AssetsEntryProps) {
   const { currentUser: user } = useAuthenticatedUser()
+  const navigate = useNavigate()
   const { deleteAsset } = useDeleteAsset()
   const { pathname } = useLocation()
   const isMobile = useMediaQuery({ maxWidth: 640 })
@@ -28,7 +29,7 @@ export default function AssetEntry({
       <time dateTime={createdAt}>{formatDate(createdAt)}</time>
     )
   const generateButtons = (assetId: string) => {
-    if (pathname === '/dashboard/assets' && user?.role === 'admin') {
+    if (pathname === `/dashboard/assets/${_id}` && user?.role === 'admin') {
       if (isMobile) {
         return (
           <div className="flex gap-1">
@@ -83,7 +84,11 @@ export default function AssetEntry({
     )
 
   async function onDelete(assetId: string) {
-    deleteAsset(assetId)
+    deleteAsset(assetId, {
+      onSuccess: () => {
+        navigate('/dashboard/assets')
+      },
+    })
   }
 
   return (

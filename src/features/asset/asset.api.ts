@@ -30,3 +30,13 @@ export async function createAsset(input: CreateAssetValues) {
   const response = await api.post<Asset>('/assets', input)
   return response.data
 }
+
+interface UpdateAssetValues {
+  name: string
+  description?: string
+  serialNumber: string
+}
+
+export async function editAsset(input: UpdateAssetValues, assetId: string) {
+  await api.patch(`/assets/${assetId}`, input)
+}

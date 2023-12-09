@@ -13,6 +13,7 @@ import AssetDetailsPage from './pages/assetDetailsPage'
 import About from './pages/aboutPage'
 import NotFoundPage from './features/ui/not-found-page'
 import NewAssetPage from './pages/newAssetPage'
+import UpdateAssetPage from './pages/updateAssetPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: 'assets/:assetId',
         element: <AssetDetailsPage />,
+      },
+      {
+        path: 'assets/:assetId/edit-asset',
+        element: <UpdateAssetPage />,
       },
       {
         path: 'about',

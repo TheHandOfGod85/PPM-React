@@ -23,7 +23,7 @@ export default function AssetsPage() {
     navigate('/dashboard/assets?' + searchParams.toString())
   }
 
-  if (isLoading && !filter) {
+  if (isLoading && !filter && !page) {
     return <LoadingSpinner />
   }
 
@@ -39,7 +39,9 @@ export default function AssetsPage() {
             ))}
           </div>
         )}
-        {assets.length === 0 && <p className="title">No assets found</p>}
+        {assets.length === 0 && !isLoading ? (
+          <p className="title">No assets found</p>
+        ) : null}
         {assets.length > 0 && (
           <AssetsPaginationBar currentPage={page} totalPages={totalPages} />
         )}
