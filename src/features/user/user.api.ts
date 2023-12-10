@@ -26,3 +26,19 @@ export async function getAuthenticatedUser() {
 export async function requestResetPasswordCode(email: string) {
   await api.post('/user/reset-password-code', { email })
 }
+
+interface ResetPasswordValues {
+  email: string
+  password: string
+}
+
+export async function resetPassword(
+  credentials: ResetPasswordValues,
+  verificationCode: string | undefined
+) {
+  const response = await api.post<User>('/user/reset-password', {
+    ...credentials,
+    verificationCode,
+  })
+  return response.data
+}
