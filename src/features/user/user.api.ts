@@ -22,3 +22,7 @@ export async function getAuthenticatedUser() {
   }
   return response.data
 }
+
+export async function requestResetPasswordCode(email: string) {
+  await api.post('/user/reset-password-code', { email })
+}

@@ -15,6 +15,7 @@ import NewAssetPage from './pages/newAssetPage'
 import NewPartPage from './pages/newPartPage'
 import Root from './pages/root'
 import UpdateAssetPage from './pages/updateAssetPage'
+import RequestResetPasswordPage from './pages/requestResetPasswordPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -60,6 +61,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: 'reset-password-request', element: <RequestResetPasswordPage /> },
   { path: '*', element: <NotFoundPage /> },
 ])
 

@@ -80,7 +80,7 @@ export default function Login() {
                     Login
                   </LoadingButton>
                   <Link
-                    to={'/users/reset-password-request'}
+                    to={'/reset-password-request'}
                     className="text-right hover:text-slate-600 underline"
                   >
                     Forgot password?
