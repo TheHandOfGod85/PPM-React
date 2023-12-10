@@ -13,13 +13,8 @@ export default function usePartsByAssetId({
   page,
   filter,
 }: GetPartsByAssetIdParams) {
-  let x: PartsPage = {
-    parts: [],
-    page: 1,
-    totalPages: 0,
-  }
-  const { data: partsPage = x, isLoading } = useQuery({
-    queryKey: ['parts'],
+  const { data: partsPage = {} as PartsPage, isLoading } = useQuery({
+    queryKey: ['parts', page, assetId, filter],
     queryFn: () => PartApi.getPartsByAssetId(page, assetId, filter),
   })
   return {

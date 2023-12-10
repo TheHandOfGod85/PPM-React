@@ -1,113 +1,144 @@
-import { useState } from 'react'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 import { useMediaQuery } from 'react-responsive'
-import { Link } from 'react-router-dom'
-import useDeletePart from '../hooks/useDeletePart'
-import useAuthenticatedUser from '../../user/hooks/useAuthenticatedUser'
-import { Part } from '../part.model'
-import { openModal } from '../../../utils/utils'
 import LoadingSpinner from '../../ui/LoadingSpinner'
-import PopUpConfirm from '../../ui/PopUpConfirm'
-
+import Modal from '../../ui/Modal'
+import useAuthenticatedUser from '../../user/hooks/useAuthenticatedUser'
+import useDeletePart from '../hooks/useDeletePart'
+import { Part } from '../part.model'
+import EditPartForm from './EditPartForm'
+import ConfirmPopUp from '../../ui/ConfirmPopUp'
+import usePartsByAssetId from '../hooks/usePartsByAssetId'
+import PartsPaginationBar from './PartsPaginationBar'
+import GoBackButton from '../../ui/GoBackButton'
+import SearchParts from './SearchParts'
 
 interface PartsTableProps {
-  parts: Part[]
+  assetId: string
+  pageParam: number
+  filter?: string | undefined
 }
 
-export default function PartsTable({ parts }: PartsTableProps) {
+export default function PartsTable({
+  assetId,
+  pageParam,
+  filter,
+}: PartsTableProps) {
   const { isLoading: loadingUser, currentUser: user } = useAuthenticatedUser()
-  const [deletePartId, setDeletePartId] = useState('')
+  const { partsPage, isLoading: loadingParts } = usePartsByAssetId({
+    page: pageParam,
+    assetId,
+    filter,
+  })
+  const { page, parts, totalPages } = partsPage
+
   const isMobile = useMediaQuery({ maxWidth: 640 })
   const { deletePart, isDeleting } = useDeletePart()
 
-  if (loadingUser) {
+  if (loadingUser && !filter) {
     return <LoadingSpinner />
   }
 
-  const generateButtons = (partId: string) => {
+  const generateButtons = (part: Part) => {
     if (user?.role === 'admin') {
       if (isMobile) {
         return (
           <div className="flex gap-1">
-            <button
-              disabled={isDeleting}
-              className="btn btn-warning btn-xs"
-              onClick={() => {
-                setDeletePartId(partId)
-                openModal(`delete_part`)
-              }}
-            >
-              <FaTrash />
-            </button>
-            <Link
-              className="btn btn-info btn-xs"
-              to={`/dashboard/parts/edit-part/${partId}`}
-            >
-              <FaEdit />
-            </Link>
+            <Modal>
+              <Modal.Open opens="delete">
+                <button className="btn btn-warning btn-xs">
+                  <FaTrash />
+                </button>
+              </Modal.Open>
+              <Modal.Window name="delete">
+                <ConfirmPopUp
+                  resourceName={part.name}
+                  buttonActionName="Delete"
+                  disabled={isDeleting}
+                  onConfirm={() => deletePart(part._id)}
+                />
+              </Modal.Window>
+            </Modal>
+            <Modal>
+              <Modal.Open opens="edit-part">
+                <button className="btn btn-info btn-xs">
+                  <FaEdit />
+                </button>
+              </Modal.Open>
+              <Modal.Window name="edit-part">
+                <EditPartForm part={part} />
+              </Modal.Window>
+            </Modal>
           </div>
         )
       } else {
         return (
           <div className="flex flex-col gap-1">
-            <button
-              disabled={isDeleting}
-              onClick={() => {
-                setDeletePartId(partId)
-                openModal(`delete_part`)
-              }}
-              className="btn btn-warning btn-sm"
-            >
-              Delete
-            </button>
-            <Link
-              className="btn btn-info btn-sm"
-              to={`/dashboard/parts/edit-part/${partId}`}
-            >
-              Edit
-            </Link>
+            <Modal>
+              <Modal.Open opens="delete">
+                <button className="btn btn-warning btn-sm">Delete</button>
+              </Modal.Open>
+              <Modal.Window name="delete">
+                <ConfirmPopUp
+                  resourceName={part.name}
+                  buttonActionName="Delete"
+                  disabled={isDeleting}
+                  onConfirm={() => deletePart(part._id)}
+                />
+              </Modal.Window>
+            </Modal>
+            <Modal>
+              <Modal.Open opens="edit-part">
+                <button className="btn btn-info btn-sm">Edit</button>
+              </Modal.Open>
+              <Modal.Window name="edit-part">
+                <EditPartForm part={part} />
+              </Modal.Window>
+            </Modal>
           </div>
         )
       }
     }
   }
 
-  async function onDeletePart(partId: string) {
-    deletePart(partId)
-  }
-
   return (
     <>
-      <table className="table tab-md">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Part Number</th>
-            <th>Manufacturer</th>
-            <th>Image</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {parts.map((part) => (
-            <tr key={part._id}>
-              <td className="whitespace-nowrap">{part.name}</td>
-              <td>
-                <div className="collapse collapse-arrow">
-                  <input type="checkbox" />
-                  <div className="collapse-title whitespace-nowrap">
-                    Click to open
-                  </div>
-                  <div className="collapse-content">
-                    <p className="text-accent">{part.description}</p>
-                  </div>
-                </div>
-              </td>
-              <td>{part.partNumber}</td>
-              <td>{part.manufacturer}</td>
-              <td>
-                {/* If I want a responsive image
+      <div className="flex items-center justify-center my-3">
+        <SearchParts id={assetId} />
+      </div>
+      {loadingParts ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          <table className="table tab-md">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Part Number</th>
+                <th>Manufacturer</th>
+                <th>Image</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {parts?.map((part) => (
+                <tr key={part._id}>
+                  <td className="whitespace-nowrap">{part.name}</td>
+                  <td>
+                    <div className="collapse collapse-arrow">
+                      <input type="checkbox" />
+                      <div className="collapse-title whitespace-nowrap">
+                        Click to open
+                      </div>
+                      <div className="collapse-content">
+                        <p className="text-accent">{part.description}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{part.partNumber}</td>
+                  <td>{part.manufacturer}</td>
+                  <td>
+                    {/* If I want a responsive image
                I need to wrap the image in a container
                with these attributes:
                position: relative;
@@ -115,27 +146,27 @@ export default function PartsTable({ parts }: PartsTableProps) {
                max-width700px;
                aspect-ratio: at your choice;
             */}
-                <img
-                  src={part.imageUrl || '/public/images/no-image.jpg'}
-                  alt="part image"
-                  width={60}
-                  height={60}
-                  className="rounded"
-                />
-              </td>
-              <td>{generateButtons(part._id)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <PopUpConfirm
-        id="delete_part"
-        title={'Delete part'}
-        infoMessage={'Are you sure you want to delete?'}
-        buttonSubmit="Yes"
-        button2="No"
-        onSubmit={() => onDeletePart(deletePartId)}
-      />
+                    <div className="relative w-full max-w-[700px] aspect-auto">
+                      <img
+                        src={part.imageUrl || '/public/images/no-image.jpg'}
+                        alt="part image"
+                        width={60}
+                        height={60}
+                        className="rounded"
+                      />
+                    </div>
+                  </td>
+                  <td>{generateButtons(part)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="flex justify-between">
+            <PartsPaginationBar currentPage={page} totalPages={totalPages} />
+            <GoBackButton href="/dashboard/assets" />
+          </div>
+        </>
+      )}
     </>
   )
 }

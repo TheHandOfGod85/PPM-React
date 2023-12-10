@@ -1,14 +1,9 @@
 import { useParams, useSearchParams } from 'react-router-dom'
-import useAsset from '../features/asset/hooks/useAsset'
-import usePartsByAssetId from '../features/part/hooks/usePartsByAssetId'
-import LoadingSpinner from '../features/ui/LoadingSpinner'
-import NewPartButton from '../features/asset/components/NewPartButton'
 import AssetEntry from '../features/asset/components/AssetEntry'
-import SearchParts from '../features/part/components/SearchParts'
+import NewPartButton from '../features/asset/components/NewPartButton'
+import useAsset from '../features/asset/hooks/useAsset'
 import PartsTable from '../features/part/components/PartsTable'
-import PartsPaginationBar from '../features/part/components/PartsPaginationBar'
-import GoBackButton from '../features/ui/GoBackButton'
-
+import LoadingSpinner from '../features/ui/LoadingSpinner'
 
 export default function AssetDetailsPage() {
   const [searchParams] = useSearchParams()
@@ -18,14 +13,8 @@ export default function AssetDetailsPage() {
   const filter = searchParams.get('search') || undefined
 
   const { asset, isLoading: loadingAsset } = useAsset(assetId)
-  const { partsPage, isLoading: loadingParts } = usePartsByAssetId({
-    page: pageParam,
-    assetId,
-    filter,
-  })
-  const { page, parts, totalPages } = partsPage
 
-  if (loadingAsset || loadingParts) {
+  if (loadingAsset) {
     return <LoadingSpinner />
   }
 
@@ -36,14 +25,7 @@ export default function AssetDetailsPage() {
 
       <AssetEntry asset={asset} />
       <div className="overflow-x-auto mt-9 mb-3">
-        <div className="flex items-center justify-center my-3">
-          <SearchParts id={assetId} />
-        </div>
-        <PartsTable parts={parts} />
-      </div>
-      <div className="flex justify-between">
-        <PartsPaginationBar currentPage={page} totalPages={totalPages} />
-        <GoBackButton href="/dashboard/assets" />
+        <PartsTable assetId={assetId} filter={filter} pageParam={pageParam} />
       </div>
     </div>
   )

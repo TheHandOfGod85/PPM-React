@@ -41,3 +41,19 @@ export async function createPartAsset(
   const response = await api.post<Part>(`/assets/${assetId}/part`, formData)
   return response.data
 }
+
+interface UpdatePartValues {
+  name: string
+  description?: string
+  partNumber: string
+  manufacturer: string
+  partImage?: File
+}
+
+export async function updatePart(input: UpdatePartValues, partId: string) {
+  const formData = new FormData()
+  Object.entries(input).forEach(([key, value]) => {
+    formData.append(key, value)
+  })
+  await api.patch(`/part/${partId}`, formData)
+}

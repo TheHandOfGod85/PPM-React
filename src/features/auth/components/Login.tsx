@@ -23,7 +23,7 @@ type LoginFormData = yup.InferType<typeof validationSchema>
 
 export default function Login() {
   const navigate = useNavigate()
-  const { login } = useLogin()
+  const { login, isPending } = useLogin()
   const [errorText, setErrorText] = useState<string | null>(null)
 
   const {
@@ -62,11 +62,13 @@ export default function Login() {
                 <div className="join join-vertical w-full gap-3 mt-2 p-4">
                   <h3 className="card-title">Login</h3>
                   <FormInputField
+                    disabled={isPending}
                     register={register('username')}
                     placeholder="Email"
                     error={errors.username}
                   />
                   <PasswordInputField
+                    disabled={isPending}
                     register={register('password')}
                     placeholder="Password"
                     type="password"
