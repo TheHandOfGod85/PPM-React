@@ -6,7 +6,6 @@ import * as yup from 'yup'
 import { BadRequestError } from '../../../lib/http-errors'
 import { fileSchema, requiredStringSchema } from '../../../utils/validation'
 import ErrorText from '../../ui/ErrorText'
-import GoBackButton from '../../ui/GoBackButton'
 import FormInputField from '../../ui/form/FormInputField'
 import useUpdatePart from '../hooks/useUpdatePart'
 import { Part } from '../part.model'
@@ -132,8 +131,8 @@ export default function EditPartForm({
             >
               Edit
             </button>
-            <div></div>
-            <GoBackButton href={`/dashboard/assets/${part.asset._id}`} />
+            {/* <div></div>
+            <GoBackButton href={`/dashboard/assets/${part.asset._id}`} /> */}
           </div>
         </form>
       </div>

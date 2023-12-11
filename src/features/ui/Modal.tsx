@@ -69,6 +69,7 @@ function Window({ children, name }: { children: ReactNode; name: string }) {
     if (name) {
       open(name)
     }
+    return () => open('')
   }, [name, open])
 
   if (name !== openName) return null
