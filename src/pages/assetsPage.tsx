@@ -43,7 +43,11 @@ export default function AssetsPage() {
           <p className="title">No assets found</p>
         ) : null}
         {assets.length > 0 && (
-          <AssetsPaginationBar currentPage={page} totalPages={totalPages} />
+          <AssetsPaginationBar
+            currentPage={page}
+            totalPages={totalPages}
+            filter={filter}
+          />
         )}
       </div>
     </>

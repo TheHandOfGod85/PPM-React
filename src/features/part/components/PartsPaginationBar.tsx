@@ -5,12 +5,14 @@ interface AssetsPaginationBarProps {
   currentPage: number
   totalPages: number
   assetId: string
+  filter?: string
 }
 
 export default function PartsPaginationBar({
   currentPage,
   totalPages,
   assetId,
+  filter,
 }: AssetsPaginationBarProps) {
   const navigate = useNavigate()
 
@@ -20,7 +22,11 @@ export default function PartsPaginationBar({
       currentPage={currentPage}
       pageCount={totalPages}
       onPageItemClicked={(page) => {
-        navigate(`/dashboard/assets/${assetId}?page=${page}`)
+        filter
+          ? navigate(
+              `/dashboard/assets/${assetId}?search=${filter}&page=${page}`
+            )
+          : navigate(`/dashboard/assets/${assetId}?page=${page}`)
       }}
     />
   )

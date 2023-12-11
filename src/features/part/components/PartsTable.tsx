@@ -77,6 +77,7 @@ export default function PartsTable() {
           currentPage={page}
           totalPages={totalPages}
           assetId={assetId}
+          filter={filter}
         />
         <GoBackButton href="/dashboard/assets" />
       </div>
