@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
 import * as yup from 'yup'
 import { BadRequestError } from '../../../lib/http-errors'
 import { fileSchema, requiredStringSchema } from '../../../utils/validation'
@@ -30,7 +29,6 @@ export default function EditPartForm({
 }: EditPartFormProps) {
   const [errorText, setErrorText] = useState<string | null>(null)
   const { updatePart, isUpdating } = useUpdatePart()
-  const navigate = useNavigate()
 
   async function onSubmit({
     manufacturer,
@@ -51,7 +49,7 @@ export default function EditPartForm({
     }
     updatePart(updateValues, {
       onSuccess: () => {
-        navigate(`/dashboard/assets/${part.asset._id}`)
+        setErrorText(null)
         onCloseModal?.()
       },
       onError: (error) => {

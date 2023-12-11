@@ -1,15 +1,14 @@
-import * as yup from 'yup'
-import { fileSchema, requiredStringSchema } from '../../../utils/validation'
-import { useNavigate, useParams } from 'react-router-dom'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import useCreatePart from '../hooks/useCreatePart'
+import { useParams } from 'react-router-dom'
+import * as yup from 'yup'
 import { BadRequestError, ConflictError } from '../../../lib/http-errors'
-import FormInputField from '../../ui/form/FormInputField'
-import LoadingButton from '../../ui/LoadingButton'
-import GoBackButton from '../../ui/GoBackButton'
+import { fileSchema, requiredStringSchema } from '../../../utils/validation'
 import ErrorText from '../../ui/ErrorText'
+import LoadingButton from '../../ui/LoadingButton'
+import FormInputField from '../../ui/form/FormInputField'
+import useCreatePart from '../hooks/useCreatePart'
 
 const validationSchema = yup.object({
   name: requiredStringSchema,
@@ -21,11 +20,14 @@ const validationSchema = yup.object({
 
 type CreatePartFormData = yup.InferType<typeof validationSchema>
 
-export default function NewPartForm() {
+interface NewPartFormProps {
+  onCloseModal?: () => void
+}
+
+export default function NewPartForm({ onCloseModal }: NewPartFormProps) {
   const { assetId } = useParams()
   const { createPart, isCreatingPart } = useCreatePart()
   const [errorText, setErrorText] = useState<string | null>(null)
-  const navigate = useNavigate()
 
   const {
     register,
@@ -53,7 +55,7 @@ export default function NewPartForm() {
     }
     createPart(createPartvalues, {
       onSuccess: () => {
-        navigate(`/dashboard/assets/${assetId}`)
+        onCloseModal?.()
       },
       onError: (error) => {
         if (
@@ -120,8 +122,6 @@ export default function NewPartForm() {
           >
             Create part
           </LoadingButton>
-          <div></div>
-          <GoBackButton href={`/dashboard/assets/${assetId}`} />
         </div>
       </form>
     </div>

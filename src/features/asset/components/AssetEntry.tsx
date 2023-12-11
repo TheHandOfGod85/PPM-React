@@ -1,11 +1,12 @@
 import { FaEdit, FaTrash } from 'react-icons/fa'
-import { useMediaQuery } from 'react-responsive'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { formatDate, openModal } from '../../../utils/utils'
-import PopUpConfirm from '../../ui/PopUpConfirm'
+import { formatDate } from '../../../utils/utils'
+import ConfirmPopUp from '../../ui/ConfirmPopUp'
+import Modal from '../../ui/Modal'
 import useAuthenticatedUser from '../../user/hooks/useAuthenticatedUser'
 import { Asset } from '../asset.model'
 import useDeleteAsset from '../hooks/useDeleteAsset'
+import EditAssetForm from './EditAssetForm'
 
 interface AssetsEntryProps {
   asset: Asset
@@ -15,10 +16,11 @@ export default function AssetEntry({
   asset: { name, description, createdAt, updatedAt, serialNumber, _id },
 }: AssetsEntryProps) {
   const { currentUser: user } = useAuthenticatedUser()
-  const navigate = useNavigate()
-  const { deleteAsset } = useDeleteAsset()
+  const { deleteAsset, isDeleting } = useDeleteAsset()
   const { pathname } = useLocation()
-  const isMobile = useMediaQuery({ maxWidth: 640 })
+  const editAsset = `edit-asset-${_id}`
+  const deleteAssetById = `delete-asset-${_id}`
+  const navigate = useNavigate()
 
   const createdUpdatedAt =
     updatedAt > createdAt ? (
@@ -28,47 +30,45 @@ export default function AssetEntry({
     ) : (
       <time dateTime={createdAt}>{formatDate(createdAt)}</time>
     )
-  const generateButtons = (assetId: string) => {
+
+  const generateButtons = () => {
     if (pathname === `/dashboard/assets/${_id}` && user?.role === 'admin') {
-      if (isMobile) {
-        return (
-          <div className="flex gap-1">
-            <button
-              className="btn btn-warning btn-xs"
-              onClick={() => {
-                openModal(`asset_delete`)
-              }}
-            >
-              <FaTrash />
-            </button>
-            <Link
-              className="btn btn-info btn-xs"
-              to={`/dashboard/assets/${assetId}/edit-asset`}
-            >
-              <FaEdit />
-            </Link>
-          </div>
-        )
-      } else {
-        return (
-          <div className="flex gap-1">
-            <button
-              onClick={() => {
-                openModal(`asset_delete`)
-              }}
-              className="btn btn-warning btn-sm"
-            >
-              Delete
-            </button>
-            <Link
-              className="btn btn-info btn-sm"
-              to={`/dashboard/assets/${assetId}/edit-asset`}
-            >
-              Edit
-            </Link>
-          </div>
-        )
-      }
+      return (
+        <div className="flex gap-1">
+          <Modal>
+            <Modal.Open opens={deleteAssetById}>
+              <button className="btn btn-warning btn-sm">
+                <FaTrash />
+              </button>
+            </Modal.Open>
+            <Modal.Window name={deleteAssetById}>
+              <ConfirmPopUp
+                resourceName={name}
+                buttonActionName="delete"
+                onConfirm={() =>
+                  deleteAsset(_id, {
+                    onSuccess: () => {
+                      navigate('/dashboard/assets')
+                    },
+                  })
+                }
+                disabled={isDeleting}
+              />
+            </Modal.Window>
+          </Modal>
+
+          <Modal>
+            <Modal.Open opens={editAsset}>
+              <button className="btn btn-info btn-sm">
+                <FaEdit />
+              </button>
+            </Modal.Open>
+            <Modal.Window name={editAsset}>
+              <EditAssetForm />
+            </Modal.Window>
+          </Modal>
+        </div>
+      )
     }
   }
 
@@ -82,14 +82,6 @@ export default function AssetEntry({
     ) : (
       <h2 className="card-title text-accent text-2xl font-bold">{name}</h2>
     )
-
-  async function onDelete(assetId: string) {
-    deleteAsset(assetId, {
-      onSuccess: () => {
-        navigate('/dashboard/assets')
-      },
-    })
-  }
 
   return (
     <>
@@ -106,18 +98,10 @@ export default function AssetEntry({
           </p>
           <span className="text-info">{createdUpdatedAt}</span>
           <div className="card-actions justify-end p-4">
-            {generateButtons(_id)}
+            {generateButtons()}
           </div>
         </div>
       </div>
-      <PopUpConfirm
-        id="asset_delete"
-        title="Delete asset"
-        infoMessage={`Are you sure you want to delete asset ${name}, it will delete all the parts too`}
-        buttonSubmit="Yes"
-        button2="No"
-        onSubmit={() => onDelete(_id)}
-      />
     </>
   )
 }

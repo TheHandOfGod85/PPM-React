@@ -5,6 +5,8 @@ import PartRow from './PartRow'
 import PartsPaginationBar from './PartsPaginationBar'
 import SearchParts from './SearchParts'
 import Table from '../../ui/Table'
+import Modal from '../../ui/Modal'
+import NewPartForm from './NewPartForm'
 
 interface PartsTableProps {
   assetId: string
@@ -26,8 +28,17 @@ export default function PartsTable({
 
   return (
     <>
-      <div className="flex items-center justify-center my-3">
+      <div className="flex items-center justify-between my-3">
+        <Modal>
+          <Modal.Open opens="new-part">
+            <button className="btn btn-neutral mb-2 btn-sm">new part</button>
+          </Modal.Open>
+          <Modal.Window name="new-part">
+            <NewPartForm />
+          </Modal.Window>
+        </Modal>
         <SearchParts id={assetId} />
+        <div></div>
       </div>
       {loadingParts ? (
         <LoadingSpinner />

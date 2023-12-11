@@ -3,11 +3,9 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
-import { useNavigate } from 'react-router-dom'
 import { BadRequestError, ConflictError } from '../../../lib/http-errors'
 import { requiredStringSchema } from '../../../utils/validation'
 import ErrorText from '../../ui/ErrorText'
-import GoBackButton from '../../ui/GoBackButton'
 import LoadingButton from '../../ui/LoadingButton'
 import FormInputField from '../../ui/form/FormInputField'
 import useCreateAsset from '../hooks/useCreateAsset'
@@ -19,8 +17,11 @@ const validationSchema = yup.object({
 })
 type CreateAssetFormData = yup.InferType<typeof validationSchema>
 
-export default function NewAssetForm() {
-  const navigate = useNavigate()
+interface NewAssetFormProps {
+  onCloseModal?: () => void
+}
+
+export default function NewAssetForm({ onCloseModal }: NewAssetFormProps) {
   const { createAsset, isCreating } = useCreateAsset()
   const [errorText, setErrorText] = useState<string | null>(null)
 
@@ -35,7 +36,9 @@ export default function NewAssetForm() {
   async function onSubmit(input: CreateAssetFormData) {
     createAsset(input, {
       onSuccess: () => {
-        navigate('/dashboard/assets')
+        reset()
+        setErrorText(null)
+        onCloseModal?.()
       },
       onError: (error) => {
         if (
@@ -89,8 +92,6 @@ export default function NewAssetForm() {
             >
               Create asset
             </LoadingButton>
-            <div></div>
-            <GoBackButton href="/dashboard/assets" />
           </div>
         </form>
       </div>

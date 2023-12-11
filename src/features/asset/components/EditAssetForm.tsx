@@ -1,18 +1,15 @@
-import * as yup from 'yup'
-import { requiredStringSchema } from '../../../utils/validation'
-import { useEffect, useState } from 'react'
-import useUpdateAsset from '../hooks/useUpdateAsset'
-import { useNavigate, useParams } from 'react-router-dom'
-import useAsset from '../hooks/useAsset'
-import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { useParams } from 'react-router-dom'
+import * as yup from 'yup'
 import { BadRequestError } from '../../../lib/http-errors'
-import FormInputField from '../../ui/form/FormInputField'
+import { requiredStringSchema } from '../../../utils/validation'
 import ErrorText from '../../ui/ErrorText'
-import { openModal } from '../../../utils/utils'
-import GoBackButton from '../../ui/GoBackButton'
-import PopUpConfirm from '../../ui/PopUpConfirm'
 import LoadingSpinner from '../../ui/LoadingSpinner'
+import FormInputField from '../../ui/form/FormInputField'
+import useAsset from '../hooks/useAsset'
+import useUpdateAsset from '../hooks/useUpdateAsset'
 
 const validationSchema = yup.object({
   name: requiredStringSchema,
@@ -21,8 +18,11 @@ const validationSchema = yup.object({
 })
 type EditAssetFormData = yup.InferType<typeof validationSchema>
 
-export default function EditAssetForm() {
-  const navigate = useNavigate()
+interface EditAssetFormProps {
+  onCloseModal?: () => void
+}
+
+export default function EditAssetForm({ onCloseModal }: EditAssetFormProps) {
   const { assetId } = useParams()
   const { asset, isLoading } = useAsset(assetId!)
   const { isUpdating, updateAsset } = useUpdateAsset()
@@ -60,7 +60,8 @@ export default function EditAssetForm() {
     }
     updateAsset(updateValues, {
       onSuccess: () => {
-        navigate(`/dashboard/assets/${asset._id}`)
+        setErrorText(null)
+        onCloseModal?.()
       },
       onError: (error) => {
         if (error instanceof BadRequestError) {
@@ -82,7 +83,7 @@ export default function EditAssetForm() {
     <>
       <div className="container mx-auto max-w-[1000px] px-2">
         <h1 className="title">Edit asset</h1>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="join join-vertical w-full gap-5">
             <FormInputField
               disabled={isUpdating}
@@ -108,26 +109,12 @@ export default function EditAssetForm() {
             {errorText && <ErrorText errorText={errorText} />}
           </div>
           <div className="flex flex-row items-center justify-between mt-2">
-            <button
-              type="button"
-              className="btn btn-neutral"
-              onClick={() => openModal('edit_asset_confirm')}
-            >
+            <button type="submit" className="btn btn-neutral">
               Edit
             </button>
-            <div></div>
-            <GoBackButton href={`/dashboard/assets/${asset._id}`} />
           </div>
         </form>
       </div>
-      <PopUpConfirm
-        id="edit_asset_confirm"
-        title="Edit asset"
-        infoMessage={`Are you sure you want to edit asset ${asset?.name}?`}
-        buttonSubmit="Yes"
-        button2="No"
-        onSubmit={handleSubmit(onSubmit)}
-      />
     </>
   )
 }
