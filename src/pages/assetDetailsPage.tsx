@@ -1,15 +1,12 @@
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import AssetEntry from '../features/asset/components/AssetEntry'
 import useAsset from '../features/asset/hooks/useAsset'
 import PartsTable from '../features/part/components/PartsTable'
 import LoadingSpinner from '../features/ui/LoadingSpinner'
 
 export default function AssetDetailsPage() {
-  const [searchParams] = useSearchParams()
   const { assetId } = useParams()
   if (!assetId) throw Error('Id is missing')
-  const pageParam = parseInt(searchParams.get('page') || '1')
-  const filter = searchParams.get('search') || undefined
 
   const { asset, isLoading: loadingAsset } = useAsset(assetId)
 
@@ -23,7 +20,7 @@ export default function AssetDetailsPage() {
 
       <AssetEntry asset={asset} />
       <div className="overflow-x-auto mt-9 mb-3">
-        <PartsTable assetId={assetId} filter={filter} pageParam={pageParam} />
+        <PartsTable />
       </div>
     </div>
   )

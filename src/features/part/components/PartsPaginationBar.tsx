@@ -4,11 +4,13 @@ import PaginationBar from '../../ui/PaginatorBar'
 interface AssetsPaginationBarProps {
   currentPage: number
   totalPages: number
+  assetId: string
 }
 
 export default function PartsPaginationBar({
   currentPage,
   totalPages,
+  assetId,
 }: AssetsPaginationBarProps) {
   const navigate = useNavigate()
 
@@ -18,7 +20,7 @@ export default function PartsPaginationBar({
       currentPage={currentPage}
       pageCount={totalPages}
       onPageItemClicked={(page) => {
-        navigate('/dashboard`/parts?page=' + page)
+        navigate(`/dashboard/assets/${assetId}?page=${page}`)
       }}
     />
   )

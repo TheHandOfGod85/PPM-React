@@ -7,18 +7,22 @@ import SearchParts from './SearchParts'
 import Table from '../../ui/Table'
 import Modal from '../../ui/Modal'
 import NewPartForm from './NewPartForm'
+import useAuthenticatedUser from '../../user/hooks/useAuthenticatedUser'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
-interface PartsTableProps {
-  assetId: string
-  pageParam: number
-  filter?: string | undefined
-}
+export default function PartsTable() {
+  const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const filter = searchParams.get('search') || undefined
+  const { assetId } = useParams()
+  if (!assetId) throw Error('Id is missing')
+  const pageParam = parseInt(searchParams.get('page') || '1')
 
-export default function PartsTable({
-  assetId,
-  pageParam,
-  filter,
-}: PartsTableProps) {
+  if (pageParam < 1) {
+    setSearchParams({ page: '1' })
+    navigate('/dashboard/assets?' + searchParams.toString())
+  }
+
   const { partsPage, isLoading: loadingParts } = usePartsByAssetId({
     page: pageParam,
     assetId,
@@ -26,17 +30,27 @@ export default function PartsTable({
   })
   const { page, parts, totalPages } = partsPage
 
+  if (totalPages > 0 && page > totalPages) {
+    setSearchParams({ page: totalPages.toString() })
+    navigate('/dashboard/assets?' + searchParams.toString())
+  }
+  const { currentUser } = useAuthenticatedUser()
+
   return (
     <>
       <div className="flex items-center justify-between my-3">
-        <Modal>
-          <Modal.Open opens="new-part">
-            <button className="btn btn-neutral mb-2 btn-sm">new part</button>
-          </Modal.Open>
-          <Modal.Window name="new-part">
-            <NewPartForm />
-          </Modal.Window>
-        </Modal>
+        {currentUser?.role === 'admin' ? (
+          <Modal>
+            <Modal.Open opens="new-part">
+              <button className="btn btn-neutral mb-2 btn-sm">new part</button>
+            </Modal.Open>
+            <Modal.Window name="new-part">
+              <NewPartForm />
+            </Modal.Window>
+          </Modal>
+        ) : (
+          <div></div>
+        )}
         <SearchParts id={assetId} />
         <div></div>
       </div>
@@ -59,7 +73,11 @@ export default function PartsTable({
         </Table>
       )}
       <div className="flex justify-between">
-        <PartsPaginationBar currentPage={page} totalPages={totalPages} />
+        <PartsPaginationBar
+          currentPage={page}
+          totalPages={totalPages}
+          assetId={assetId}
+        />
         <GoBackButton href="/dashboard/assets" />
       </div>
     </>

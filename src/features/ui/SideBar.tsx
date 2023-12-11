@@ -6,15 +6,9 @@ import {
   FaUserFriends,
 } from 'react-icons/fa'
 import { FaArrowRightFromBracket } from 'react-icons/fa6'
-import {
-  Link,
-  NavLink,
-  Outlet,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom'
-import useLogout from '../user/hooks/useLogout'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import useAuthenticatedUser from '../user/hooks/useAuthenticatedUser'
+import useLogout from '../user/hooks/useLogout'
 
 export default function SideBar() {
   const { pathname } = useLocation()
@@ -79,8 +73,16 @@ export default function SideBar() {
                 </Link>
               </li>
             )}
+            <li>
+              <Link
+                to={'/dashboard/assets'}
+                className={pathname == '/dashboard/assets' ? 'active' : ''}
+              >
+                <FaTools /> Assets List
+              </Link>
+            </li>
 
-            <div className="dropdown dropdown-hover">
+            {/* <div className="dropdown dropdown-hover">
               <label tabIndex={0} className="btn text-[1.1rem] normal-case">
                 <FaTools /> Asset
               </label>
@@ -111,7 +113,7 @@ export default function SideBar() {
                   </li>
                 )}
               </ul>
-            </div>
+            </div> */}
             <li className="absolute bottom-0 mb-4">
               <Link
                 to={'/dashboard/about'}

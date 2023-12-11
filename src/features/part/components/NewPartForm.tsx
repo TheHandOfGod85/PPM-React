@@ -32,6 +32,7 @@ export default function NewPartForm({ onCloseModal }: NewPartFormProps) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm<CreatePartFormData>({
     resolver: yupResolver(validationSchema),
@@ -55,6 +56,7 @@ export default function NewPartForm({ onCloseModal }: NewPartFormProps) {
     }
     createPart(createPartvalues, {
       onSuccess: () => {
+        reset()
         onCloseModal?.()
       },
       onError: (error) => {

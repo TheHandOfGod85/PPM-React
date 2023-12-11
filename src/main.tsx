@@ -11,7 +11,6 @@ import About from './pages/aboutPage'
 import AssetDetailsPage from './pages/assetDetailsPage'
 import AssetsPage from './pages/assetsPage'
 import Dashboard from './pages/dashboardPage'
-import NewAssetPage from './pages/newAssetPage'
 import Root from './pages/root'
 import RequestResetPasswordPage from './pages/requestResetPasswordPage'
 import ResetPasswordPage from './pages/resetPasswordPage'
@@ -37,10 +36,6 @@ const router = createBrowserRouter([
       {
         path: 'assets',
         element: <AssetsPage />,
-      },
-      {
-        path: 'assets/new-asset',
-        element: <NewAssetPage />,
       },
       {
         path: 'assets/:assetId',
