@@ -38,12 +38,10 @@ export default function PartRow({ part }: PartRowProps) {
         <p>{manufacturer}</p>
       </td>
       <td>
-        <div className="relative w-full max-w-[700px] aspect-auto">
+        <div className="mask w-12 h-12">
           <img
             src={imageUrl || '/public/images/no-image.jpg'}
             alt="part image"
-            width={60}
-            height={60}
             className="rounded"
           />
         </div>

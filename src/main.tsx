@@ -14,6 +14,7 @@ import Dashboard from './pages/dashboardPage'
 import Root from './pages/root'
 import RequestResetPasswordPage from './pages/requestResetPasswordPage'
 import ResetPasswordPage from './pages/resetPasswordPage'
+import UsersPage from './pages/usersPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: 'assets',
         element: <AssetsPage />,
+      },
+      {
+        path: 'users',
+        element: <UsersPage />,
       },
       {
         path: 'assets/:assetId',

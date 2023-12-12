@@ -6,10 +6,12 @@ import { ReactNode } from 'react'
 
 // const TableContext = createContext<TableContextProps | undefined>(undefined)
 
-function Table({ children }: { children: ReactNode }) {
+function Table({ children, style }: { children: ReactNode; style?: string }) {
   return (
     // <TableContext.Provider >
-    <table className={`table`}>{children}</table>
+    <div className="overflow-x-auto">
+      <table className={`table ${style}`}>{children}</table>
+    </div>
     // </TableContext.Provider>
   )
 }
