@@ -19,7 +19,7 @@ export default function AssetDetailsPage() {
       <h1 className="title">Asset details</h1>
 
       <AssetEntry asset={asset} />
-      <div className="overflow-x-auto mt-9 mb-3">
+      <div className="mt-9 mb-3">
         <PartsTable />
       </div>
     </div>

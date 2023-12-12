@@ -18,7 +18,6 @@ export default function PartsPaginationBar({
 
   return (
     <PaginationBar
-      className="my-4"
       currentPage={currentPage}
       pageCount={totalPages}
       onPageItemClicked={(page) => {

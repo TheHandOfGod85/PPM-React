@@ -1,14 +1,13 @@
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import GoBackButton from '../../ui/GoBackButton'
-import LoadingSpinner from '../../ui/LoadingSpinner'
+import Modal from '../../ui/Modal'
+import Table from '../../ui/Table'
+import useAuthenticatedUser from '../../user/hooks/useAuthenticatedUser'
 import usePartsByAssetId from '../hooks/usePartsByAssetId'
+import NewPartForm from './NewPartForm'
 import PartRow from './PartRow'
 import PartsPaginationBar from './PartsPaginationBar'
 import SearchParts from './SearchParts'
-import Table from '../../ui/Table'
-import Modal from '../../ui/Modal'
-import NewPartForm from './NewPartForm'
-import useAuthenticatedUser from '../../user/hooks/useAuthenticatedUser'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 
 export default function PartsTable() {
   const navigate = useNavigate()
@@ -23,7 +22,7 @@ export default function PartsTable() {
     navigate('/dashboard/assets?' + searchParams.toString())
   }
 
-  const { partsPage, isLoading: loadingParts } = usePartsByAssetId({
+  const { partsPage } = usePartsByAssetId({
     page: pageParam,
     assetId,
     filter,
@@ -54,24 +53,20 @@ export default function PartsTable() {
         <SearchParts id={assetId} />
         <div></div>
       </div>
-      {loadingParts ? (
-        <LoadingSpinner />
-      ) : (
-        <Table>
-          <Table.Header>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Part Number</th>
-            <th>Manufacturer</th>
-            <th>Image</th>
-            <th></th>
-          </Table.Header>
-          <Table.Body
-            data={parts}
-            render={(part) => <PartRow part={part} key={part._id} />}
-          ></Table.Body>
-        </Table>
-      )}
+      <Table>
+        <Table.Header>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Part Number</th>
+          <th>Manufacturer</th>
+          <th>Image</th>
+          <th></th>
+        </Table.Header>
+        <Table.Body
+          data={parts}
+          render={(part) => <PartRow part={part} key={part._id} />}
+        ></Table.Body>
+      </Table>
       <div className="flex justify-between">
         <PartsPaginationBar
           currentPage={page}
