@@ -40,7 +40,7 @@ export default function PartRow({ part }: PartRowProps) {
       <td>
         <div className="mask w-12 h-12">
           <img
-            src={imageUrl || '/public/images/no-image.jpg'}
+            src={imageUrl || '/no-image.jpg'}
             alt="part image"
             className="rounded"
           />
