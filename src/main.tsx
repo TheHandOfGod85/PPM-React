@@ -15,6 +15,7 @@ import Root from './pages/root'
 import RequestResetPasswordPage from './pages/requestResetPasswordPage'
 import ResetPasswordPage from './pages/resetPasswordPage'
 import UsersPage from './pages/usersPage'
+import SignupPage from './pages/signupPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
   },
   { path: 'reset-password-request', element: <RequestResetPasswordPage /> },
   { path: 'reset-password/:verificationCode', element: <ResetPasswordPage /> },
+  {
+    path: 'users/:userId/signup/:verificationCode',
+    element: <SignupPage />,
+  },
   { path: '*', element: <NotFoundPage /> },
 ])
 

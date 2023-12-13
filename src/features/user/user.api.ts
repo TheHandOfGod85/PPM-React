@@ -51,3 +51,30 @@ export async function getAllUsers() {
 export async function removeUser(userId: string) {
   await api.delete(`/user/remove/${userId}`)
 }
+
+export async function sendRegistration(email: string, role: string) {
+  await api.post('/user/send-registration', {
+    email,
+    role,
+  })
+}
+
+interface SignUpValues {
+  username: string
+  password: string
+  about?: string
+  displayName?: string
+}
+
+export async function SignUp(
+  credentials: SignUpValues,
+  userId: string | undefined,
+  verificationCode: string | undefined
+) {
+  const response = await api.post<User>('/user/signup', {
+    ...credentials,
+    userId,
+    verificationCode,
+  })
+  return response.data
+}

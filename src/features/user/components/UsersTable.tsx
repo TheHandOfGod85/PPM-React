@@ -1,7 +1,10 @@
+import { FaUser } from 'react-icons/fa'
 import LoadingSpinner from '../../ui/LoadingSpinner'
+import Modal from '../../ui/Modal'
 import Table from '../../ui/Table'
 import useUsers from '../hooks/useUsers'
 import UsersRow from './UsersRow'
+import SendRegistrationForm from './SendRegistrationForm'
 
 export default function UsersTable() {
   const { users, loadingUsers } = useUsers()
@@ -13,6 +16,16 @@ export default function UsersTable() {
   return (
     <>
       <h1 className="title">Users</h1>
+      <Modal>
+        <Modal.Open opens="send">
+          <button className="btn btn-accent normal-case btn-sm ms-2 mb-2">
+            <FaUser /> New User
+          </button>
+        </Modal.Open>
+        <Modal.Window name="send">
+          <SendRegistrationForm />
+        </Modal.Window>
+      </Modal>
       <div className="mx-auto">
         <Table style="table-lg">
           <Table.Header>
