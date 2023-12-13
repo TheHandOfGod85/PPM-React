@@ -89,12 +89,14 @@ export default function AssetEntry({
         <div className="card-body">
           {customClasses}
           <h3 className="text-lg text-accent-focus ">
-            <span className="font-semibold">Serial Number :</span>{' '}
-            {serialNumber}
+            <span className="font-semibold text-white">
+              Serial Number : {serialNumber}
+            </span>
           </h3>
           <p className="text-sm ">
-            <span className="font-semibold">Description: </span>
-            <span>{description}</span>
+            <span className="font-semibold text-white">
+              Description: {description}
+            </span>
           </p>
           <span className="text-info">{createdUpdatedAt}</span>
           <div className="card-actions justify-end p-4">
