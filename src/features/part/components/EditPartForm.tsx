@@ -8,6 +8,7 @@ import ErrorText from '../../ui/ErrorText'
 import FormInputField from '../../ui/form/FormInputField'
 import useUpdatePart from '../hooks/useUpdatePart'
 import { Part } from '../part.model'
+import toast from 'react-hot-toast'
 
 interface EditPartFormProps {
   part: Part
@@ -58,7 +59,8 @@ export default function EditPartForm({
           console.error(error)
         } else {
           console.error(error)
-          alert(error)
+          toast.error(error.message)
+
         }
       },
     })

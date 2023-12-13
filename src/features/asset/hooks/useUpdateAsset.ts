@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import * as AssetApi from '../asset.api'
+import toast from 'react-hot-toast'
 
 interface UpdateAssetValues {
   name: string
@@ -19,6 +20,7 @@ export default function useUpdateAsset() {
         queryClient.invalidateQueries({
           queryKey: ['asset'],
         })
+      toast.success(`Asset updated`)
     },
   })
 

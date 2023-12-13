@@ -13,6 +13,7 @@ import LoadingButton from '../../ui/LoadingButton'
 import FormInputField from '../../ui/form/FormInputField'
 import SelectInputField from '../../ui/form/SelectInputField'
 import useSendRegistration from '../hooks/useSendRegistration'
+import toast from 'react-hot-toast'
 
 const roles = ['admin', 'user']
 
@@ -59,7 +60,8 @@ export default function SendRegistrationForm({
             setErrorText('Too many requests, please try later.')
           } else {
             console.error(error)
-            alert(error)
+            toast.error(error.message)
+
           }
         },
       }

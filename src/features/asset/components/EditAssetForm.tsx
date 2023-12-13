@@ -10,6 +10,7 @@ import LoadingSpinner from '../../ui/LoadingSpinner'
 import FormInputField from '../../ui/form/FormInputField'
 import useAsset from '../hooks/useAsset'
 import useUpdateAsset from '../hooks/useUpdateAsset'
+import toast from 'react-hot-toast'
 
 const validationSchema = yup.object({
   name: requiredStringSchema,
@@ -69,7 +70,7 @@ export default function EditAssetForm({ onCloseModal }: EditAssetFormProps) {
           console.error(error)
         } else {
           console.error(error)
-          alert(error)
+          toast.error(error.message)
         }
       },
     })

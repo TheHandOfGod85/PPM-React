@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import * as PartApi from '../part.api'
+import toast from 'react-hot-toast'
 
 export default function useDeletePart() {
   const queryClient = useQueryClient()
@@ -9,6 +10,7 @@ export default function useDeletePart() {
       queryClient.invalidateQueries({
         queryKey: ['parts'],
       })
+      toast.success('Part deleted')
     },
   })
   return {

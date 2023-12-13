@@ -10,6 +10,7 @@ import PasswordInputField from '../features/ui/form/PasswordInputField'
 import { emailSchema, passwordSchema } from '../utils/validation'
 import useResetPassword from '../features/user/hooks/useResetPassword'
 import { BadRequestError, NotFoundError } from '../lib/http-errors'
+import toast from 'react-hot-toast'
 
 const validationSchema = yup.object({
   email: emailSchema.required(),
@@ -50,7 +51,8 @@ export default function ResetPasswordPage() {
           setErrorText(error.message)
         } else {
           console.error(error)
-          alert(error)
+          toast.error(error.message)
+
         }
       },
     })

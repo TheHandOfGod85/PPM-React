@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import * as PartApi from '../part.api'
+import toast from 'react-hot-toast'
 
 interface UpdatePartValues {
   name: string
@@ -18,6 +19,7 @@ export default function useUpdatePart() {
       queryClient.invalidateQueries({
         queryKey: ['parts'],
       })
+      toast.success('Part updated')
     },
   })
   return {

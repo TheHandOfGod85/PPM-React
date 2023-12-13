@@ -10,6 +10,7 @@ import PasswordInputField from '../features/ui/form/PasswordInputField'
 import useSignup from '../features/user/hooks/useSignup'
 import { BadRequestError, ConflictError } from '../lib/http-errors'
 import { passwordSchema, usernameSchema } from '../utils/validation'
+import toast from 'react-hot-toast'
 
 const validationSchema = yup.object({
   username: usernameSchema.required('Required'),
@@ -51,7 +52,7 @@ export default function SignupPage() {
             setErrorText(error.message)
           } else {
             console.error(error)
-            alert(error)
+            toast.error(error.message)
           }
         },
       }

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import * as AssetApi from '../asset.api'
+import toast from 'react-hot-toast'
 
 export default function useDeleteAsset() {
   const queryClient = useQueryClient()
@@ -9,6 +10,7 @@ export default function useDeleteAsset() {
       queryClient.invalidateQueries({
         queryKey: ['assets'],
       })
+      toast.success('Asset deleted')
     },
   })
 
