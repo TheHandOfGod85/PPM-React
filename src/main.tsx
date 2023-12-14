@@ -17,6 +17,9 @@ import ResetPasswordPage from './pages/resetPasswordPage'
 import UsersPage from './pages/usersPage'
 import SignupPage from './pages/signupPage'
 import { Toaster } from 'react-hot-toast'
+import ProtectedRoute from './features/ui/ProtectedRoute'
+import ProtectedRouteRole from './features/ui/ProtectRouteRole'
+import HideRoute from './features/ui/HideRoute'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,10 +30,18 @@ const queryClient = new QueryClient({
 })
 
 const router = createBrowserRouter([
-  { path: '/', element: <Root />, errorElement: <ErrorPage /> },
+  {
+    path: '/',
+    element: <Root />,
+    errorElement: <ErrorPage />,
+  },
   {
     path: '/dashboard',
-    element: <SideBar />,
+    element: (
+      <ProtectedRoute>
+        <SideBar />
+      </ProtectedRoute>
+    ),
     children: [
       {
         path: '',
@@ -42,7 +53,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'users',
-        element: <UsersPage />,
+        element: (
+          <ProtectedRouteRole>
+            <UsersPage />
+          </ProtectedRouteRole>
+        ),
       },
       {
         path: 'assets/:assetId',
@@ -54,8 +69,22 @@ const router = createBrowserRouter([
       },
     ],
   },
-  { path: 'reset-password-request', element: <RequestResetPasswordPage /> },
-  { path: 'reset-password/:verificationCode', element: <ResetPasswordPage /> },
+  {
+    path: 'reset-password-request',
+    element: (
+      <HideRoute>
+        <RequestResetPasswordPage />
+      </HideRoute>
+    ),
+  },
+  {
+    path: 'reset-password/:verificationCode',
+    element: (
+      <HideRoute>
+        <ResetPasswordPage />
+      </HideRoute>
+    ),
+  },
   {
     path: 'users/:userId/signup/:verificationCode',
     element: <SignupPage />,

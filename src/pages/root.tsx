@@ -1,5 +1,10 @@
-import Login from "../features/auth/components/Login";
+import Login from '../features/auth/components/Login'
+import HideRoute from '../features/ui/HideRoute'
 
 export default function Root() {
-  return <Login />
+  return (
+    <HideRoute>
+      <Login />
+    </HideRoute>
+  )
 }

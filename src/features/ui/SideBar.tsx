@@ -6,13 +6,7 @@ import {
   FaUserFriends,
 } from 'react-icons/fa'
 import { FaArrowRightFromBracket } from 'react-icons/fa6'
-import {
-  Link,
-  NavLink,
-  Outlet,
-  useLocation,
-  useNavigate,
-} from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import useAuthenticatedUser from '../user/hooks/useAuthenticatedUser'
 import useLogout from '../user/hooks/useLogout'
 
@@ -20,16 +14,7 @@ export default function SideBar() {
   const { pathname } = useLocation()
   const { logout } = useLogout()
   const { currentUser: user } = useAuthenticatedUser()
-  const navigate = useNavigate()
 
-  const onLogout = async () => {
-    try {
-      logout()
-      navigate('/')
-    } catch (error) {
-      console.error(error)
-    }
-  }
   return (
     <>
       <div className="drawer lg:drawer-open">
@@ -120,7 +105,7 @@ export default function SideBar() {
               </Link>
             </li>
             <li className="absolute bottom-8 mb-4">
-              <button type="button" onClick={onLogout}>
+              <button type="button" onClick={() => logout()}>
                 <FaArrowRightFromBracket /> Logout
               </button>
             </li>
