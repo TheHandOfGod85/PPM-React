@@ -60,7 +60,7 @@ export default function Login() {
             <div className="card-body">
               <form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <div className="join join-vertical w-full gap-3 mt-2 p-4">
-                  <h3 className="card-title">Login</h3>
+                  <h3 className="card-title text-white">Login</h3>
                   <FormInputField
                     disabled={isPending}
                     register={register('username')}
@@ -76,14 +76,14 @@ export default function Login() {
                   />
                   <LoadingButton
                     type="submit"
-                    className="btn-accent text-white font-bold uppercase"
+                    className="btn-accent uppercase"
                     isLoading={isSubmitting}
                   >
                     Login
                   </LoadingButton>
                   <Link
                     to={'/reset-password-request'}
-                    className="text-right hover:text-slate-600 underline"
+                    className="text-right text-slate-400 hover:text-slate-600 underline"
                   >
                     Forgot password?
                   </Link>

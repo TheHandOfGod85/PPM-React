@@ -52,7 +52,6 @@ export default function ResetPasswordPage() {
         } else {
           console.error(error)
           toast.error(error.message)
-
         }
       },
     })
@@ -66,7 +65,7 @@ export default function ResetPasswordPage() {
           <div className="card-body">
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
               <div className="join join-vertical w-full gap-3 mt-2 p-4">
-                <h3 className="card-title">Reset password</h3>
+                <h3 className="card-title text-white">Reset password</h3>
                 <FormInputField
                   register={register('email')}
                   placeholder="Email"
@@ -81,7 +80,7 @@ export default function ResetPasswordPage() {
                 />
                 <LoadingButton
                   type="submit"
-                  className="btn-accent"
+                  className="btn-accent uppercase"
                   isLoading={isSubmitting}
                 >
                   Send

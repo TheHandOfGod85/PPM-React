@@ -50,7 +50,9 @@ export default function RequestResetPasswordPage() {
           <div className="card-body">
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
               <div className="join join-vertical w-full gap-3 mt-2 p-4">
-                <h3 className="card-title">Reset password request</h3>
+                <h3 className="card-title text-white">
+                  Reset password request
+                </h3>
                 <FormInputField
                   disabled={isRequesting}
                   register={register('email')}
@@ -59,13 +61,13 @@ export default function RequestResetPasswordPage() {
                 />
                 <LoadingButton
                   type="submit"
-                  className="btn-accent"
+                  className="btn-accent uppercase"
                   isLoading={isSubmitting}
                 >
                   Send
                 </LoadingButton>
                 <Link
-                  className="text-end underline hover:text-accent-focus"
+                  className="text-end  text-slate-400 hover:text-slate-600 underline hover:text-accent-focus"
                   to={'/'}
                 >
                   Login
