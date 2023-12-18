@@ -9,6 +9,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import FormInputField from '../../ui/form/FormInputField'
 import LoadingButton from '../../ui/LoadingButton'
 import ErrorText from '../../ui/ErrorText'
+import { useParams } from 'react-router-dom'
+import useSetMaintenancePlan from '../hooks/useSetMaintenancePlan'
+import { BadRequestError } from '../../../lib/http-errors'
+import toast from 'react-hot-toast'
+
 const validationSchema = yup.object({
   startDate: requiredStringSchema,
   interval: requiredNumberSchema,
@@ -16,12 +21,14 @@ const validationSchema = yup.object({
 type CreatePlannedMaintenanceFormData = yup.InferType<typeof validationSchema>
 
 interface NewMaintenancePlanFormProps {
-  onClosedModal?: () => void
+  onCloseModal?: () => void
 }
 
 export default function NewMaintenancePlanForm({
-  onClosedModal,
+  onCloseModal,
 }: NewMaintenancePlanFormProps) {
+  const { assetId } = useParams()
+  const { setPlan, isSetting } = useSetMaintenancePlan()
   const [errorText, setErrorText] = useState<string | null>(null)
 
   const {
@@ -33,7 +40,31 @@ export default function NewMaintenancePlanForm({
     resolver: yupResolver(validationSchema),
   })
 
-  async function onSubmit() {}
+  async function onSubmit(input: CreatePlannedMaintenanceFormData) {
+    const setPlanValues = {
+      input: {
+        startDate: input.startDate,
+        interval: input.interval,
+      },
+      assetId: assetId!,
+    }
+    setPlan(setPlanValues, {
+      onSuccess: () => {
+        setErrorText(null)
+        onCloseModal?.()
+        reset()
+      },
+      onError: (error) => {
+        if (error instanceof BadRequestError) {
+          setErrorText(error.message)
+          console.error(error)
+        } else {
+          console.error(error)
+          toast.error(error.message)
+        }
+      },
+    })
+  }
 
   return (
     <>
@@ -42,15 +73,16 @@ export default function NewMaintenancePlanForm({
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col w-full gap-1">
             <FormInputField
-              //   disabled={isCreating}
+              disabled={isSetting}
               label="Select a starting date"
               register={register('startDate')}
               placeholder="Start date"
               type="date"
+              min={new Date().toISOString().split('T')[0]}
               error={errors.startDate}
             />
             <FormInputField
-              //   disabled={isCreating}
+              disabled={isSetting}
               register={register('interval')}
               label="How many weeks from starting date?"
               placeholder="Weeks"
