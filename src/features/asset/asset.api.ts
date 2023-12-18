@@ -42,11 +42,29 @@ export async function editAsset(input: UpdateAssetValues, assetId: string) {
 }
 
 interface SetNewMaintenancePlan {
-  startsDate: string
+  startDate: string
   interval: number
-  assetId: string
 }
 
-export async function setMaintenancePlan(input: SetNewMaintenancePlan) {
-  await api.post(`/assets/${input.assetId}/planned_maintenance`)
+export async function setMaintenancePlan(
+  input: SetNewMaintenancePlan,
+  assetId: string
+) {
+  await api.post(`/assets/${assetId}/planned-maintenance`, input)
+}
+
+export async function toggleCompletedTask(assetId: string, taskId: string) {
+  await api.post(`/assets/${assetId}/${taskId}/toggleCompleted`)
+}
+
+interface UpdateMaintenancePlanValues {
+  startDate: string
+  interval: number
+}
+
+export async function updateMaintenancePlan(
+  input: UpdateMaintenancePlanValues,
+  assetId: string
+) {
+  await api.post(`/assets/${assetId}/updatePlannedMaintenance`, input)
 }
