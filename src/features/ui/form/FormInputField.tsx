@@ -19,28 +19,28 @@ export default function FormInputField({
   ...props
 }: FormInputFieldProps & ComponentProps<'input'> & ComponentProps<'textarea'>) {
   return (
-    <div className="form-control">
+    <>
       {label && (
         <label className="label">
           <span className="label-text">{label}</span>
         </label>
       )}
-      {textarea ? (
-        <>
-          <textarea
-            {...register}
-            {...props}
-            className="textarea textarea-bordered textarea-md w-full"
-          ></textarea>
-          {error && (
-            <p className=" mt-2 ml-2 text-sm textarea-error">
-              {error?.message}
-            </p>
-          )}
-        </>
-      ) : (
-        <>
-          <div className="join join-horizontal">
+      <div className="join-vertical">
+        {textarea ? (
+          <>
+            <textarea
+              {...register}
+              {...props}
+              className="textarea textarea-bordered textarea-md w-full"
+            ></textarea>
+            {error && (
+              <p className=" mt-2 ml-2 text-sm textarea-error">
+                {error?.message}
+              </p>
+            )}
+          </>
+        ) : (
+          <>
             <input
               {...register}
               {...props}
@@ -52,12 +52,12 @@ export default function FormInputField({
               aria-describedby={inputGroupElement?.props.id}
             />
             {inputGroupElement}
-          </div>
-          {error && (
-            <p className=" mt-2 ml-2 text-sm text-error">{error?.message}</p>
-          )}
-        </>
-      )}
-    </div>
+            {error && (
+              <p className=" mt-2 ml-2 text-sm text-error">{error?.message}</p>
+            )}
+          </>
+        )}
+      </div>
+    </>
   )
 }

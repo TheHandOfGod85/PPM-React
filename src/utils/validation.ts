@@ -33,3 +33,4 @@ export const passwordSchema = yup
   .matches(/^(?!.* )/, 'Must not contain white spaces')
   .min(6, 'Must be at least 6 characters or more')
 export const requiredStringSchema = yup.string().required('Required')
+export const requiredNumberSchema = yup.number().required('Required')
