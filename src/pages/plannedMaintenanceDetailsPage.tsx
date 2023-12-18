@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom'
-import NewMaintenancePlanForm from '../features/asset/components/NewMaintenancePlanForm'
+import NewAndEditMaintenancePlanForm from '../features/asset/components/NewAndEditMaintenancePlanForm'
 import useAsset from '../features/asset/hooks/useAsset'
 import Modal from '../features/ui/Modal'
 import LoadingSpinner from '../features/ui/LoadingSpinner'
 import { formatDate } from '../utils/utils'
 import { CiCircleInfo } from 'react-icons/ci'
 import useToggleCompleteTask from '../features/asset/hooks/useToggleCompletedTask'
+import NewTaskForm from '../features/asset/components/NewTaskForm'
 
 export default function PlannedMaintenanceDetailsPage() {
   const { assetId } = useParams()
@@ -33,7 +34,7 @@ export default function PlannedMaintenanceDetailsPage() {
               </button>
             </Modal.Open>
             <Modal.Window name="new-maintenance">
-              <NewMaintenancePlanForm />
+              <NewAndEditMaintenancePlanForm />
             </Modal.Window>
           </Modal>
           <h1 className="text-center my-5 uppercase">
@@ -48,11 +49,11 @@ export default function PlannedMaintenanceDetailsPage() {
           </h1>
           {plannedMaintenance?.startDate !== undefined ? (
             <Modal>
-              <Modal.Open opens="new-maintenance">
+              <Modal.Open opens="new-task">
                 <button className="btn btn-accent btn-sm">add task</button>
               </Modal.Open>
-              <Modal.Window name="new-maintenance">
-                <NewMaintenancePlanForm />
+              <Modal.Window name="new-task">
+                <NewTaskForm />
               </Modal.Window>
             </Modal>
           ) : (

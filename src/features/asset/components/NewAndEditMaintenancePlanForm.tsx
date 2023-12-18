@@ -3,7 +3,7 @@ import {
   requiredNumberSchema,
   requiredStringSchema,
 } from '../../../utils/validation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import FormInputField from '../../ui/form/FormInputField'
@@ -13,6 +13,8 @@ import { useParams } from 'react-router-dom'
 import useSetMaintenancePlan from '../hooks/useSetMaintenancePlan'
 import { BadRequestError } from '../../../lib/http-errors'
 import toast from 'react-hot-toast'
+import useAsset from '../hooks/useAsset'
+import useUpdateMaintenancePlan from '../hooks/useUpdateMaintenancePlan'
 
 const validationSchema = yup.object({
   startDate: requiredStringSchema,
@@ -20,50 +22,91 @@ const validationSchema = yup.object({
 })
 type CreatePlannedMaintenanceFormData = yup.InferType<typeof validationSchema>
 
-interface NewMaintenancePlanFormProps {
+interface NewAndEditMaintenancePlanFormProps {
   onCloseModal?: () => void
 }
 
-export default function NewMaintenancePlanForm({
+export default function NewAndEditMaintenancePlanForm({
   onCloseModal,
-}: NewMaintenancePlanFormProps) {
+}: NewAndEditMaintenancePlanFormProps) {
   const { assetId } = useParams()
   const { setPlan, isSetting } = useSetMaintenancePlan()
+  const { updatePlan, isUpdatingPlan } = useUpdateMaintenancePlan()
+  const { asset } = useAsset(assetId!)
+
   const [errorText, setErrorText] = useState<string | null>(null)
+  const isEditMode = asset.plannedMaintenance.startDate !== undefined
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<CreatePlannedMaintenanceFormData>({
     resolver: yupResolver(validationSchema),
   })
 
-  async function onSubmit(input: CreatePlannedMaintenanceFormData) {
-    const setPlanValues = {
-      input: {
-        startDate: input.startDate,
-        interval: input.interval,
-      },
-      assetId: assetId!,
+  useEffect(() => {
+    if (isEditMode) {
+      const startDate = new Date(asset.plannedMaintenance.startDate)
+      const formattedDate = startDate.toISOString().split('T')[0]
+
+      setValue('interval', asset.plannedMaintenance.interval)
+      setValue('startDate', formattedDate)
     }
-    setPlan(setPlanValues, {
-      onSuccess: () => {
-        setErrorText(null)
-        onCloseModal?.()
-        reset()
-      },
-      onError: (error) => {
-        if (error instanceof BadRequestError) {
-          setErrorText(error.message)
-          console.error(error)
-        } else {
-          console.error(error)
-          toast.error(error.message)
-        }
-      },
-    })
+  }, [asset, setValue, isEditMode])
+
+  async function onSubmit(input: CreatePlannedMaintenanceFormData) {
+    if (isEditMode) {
+      const setPlanValues = {
+        input: {
+          startDate: input.startDate,
+          interval: input.interval,
+        },
+        assetId: assetId!,
+      }
+      updatePlan(setPlanValues, {
+        onSuccess: () => {
+          setErrorText(null)
+          onCloseModal?.()
+          reset()
+        },
+        onError: (error) => {
+          if (error instanceof BadRequestError) {
+            setErrorText(error.message)
+            console.error(error)
+          } else {
+            console.error(error)
+            toast.error(error.message)
+          }
+        },
+      })
+    } else {
+      const setPlanValues = {
+        input: {
+          startDate: input.startDate,
+          interval: input.interval,
+        },
+        assetId: assetId!,
+      }
+      setPlan(setPlanValues, {
+        onSuccess: () => {
+          setErrorText(null)
+          onCloseModal?.()
+          reset()
+        },
+        onError: (error) => {
+          if (error instanceof BadRequestError) {
+            setErrorText(error.message)
+            console.error(error)
+          } else {
+            console.error(error)
+            toast.error(error.message)
+          }
+        },
+      })
+    }
   }
 
   return (
@@ -73,7 +116,7 @@ export default function NewMaintenancePlanForm({
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col w-full gap-1">
             <FormInputField
-              disabled={isSetting}
+              disabled={isSetting || isUpdatingPlan}
               label="Select a starting date"
               register={register('startDate')}
               placeholder="Start date"
@@ -82,7 +125,7 @@ export default function NewMaintenancePlanForm({
               error={errors.startDate}
             />
             <FormInputField
-              disabled={isSetting}
+              disabled={isSetting || isUpdatingPlan}
               register={register('interval')}
               label="How many weeks from starting date?"
               placeholder="Weeks"

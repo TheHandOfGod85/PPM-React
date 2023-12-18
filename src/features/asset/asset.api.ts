@@ -68,3 +68,14 @@ export async function updateMaintenancePlan(
 ) {
   await api.post(`/assets/${assetId}/updatePlannedMaintenance`, input)
 }
+
+interface AddNewTaskValues {
+  task: {
+    name: string
+    description: string
+  }
+}
+
+export async function addTask(input: AddNewTaskValues, assetId: string) {
+  await api.post(`/assets/${assetId}/planned-maintenance/addTask`, input)
+}
