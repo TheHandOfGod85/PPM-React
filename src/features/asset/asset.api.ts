@@ -40,3 +40,13 @@ interface UpdateAssetValues {
 export async function editAsset(input: UpdateAssetValues, assetId: string) {
   await api.patch(`/assets/${assetId}`, input)
 }
+
+interface SetNewMaintenancePlan {
+  startsDate: string
+  interval: number
+  assetId: string
+}
+
+export async function setMaintenancePlan(input: SetNewMaintenancePlan) {
+  await api.post(`/assets/${input.assetId}/planned_maintenance`)
+}
