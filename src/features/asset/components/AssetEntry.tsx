@@ -1,4 +1,5 @@
 import { FaEdit, FaTrash } from 'react-icons/fa'
+import { FaListCheck } from 'react-icons/fa6'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { formatDate } from '../../../utils/utils'
 import ConfirmPopUp from '../../ui/ConfirmPopUp'
@@ -35,6 +36,12 @@ export default function AssetEntry({
     if (pathname === `/dashboard/assets/${_id}` && user?.role === 'admin') {
       return (
         <div className="flex gap-1">
+          <Link
+            to={`/dashboard/assets/${_id}/plannedMaintenance`}
+            className="btn btn-sm"
+          >
+            <FaListCheck />
+          </Link>
           <Modal>
             <Modal.Open opens={deleteAssetById}>
               <button className="btn btn-warning btn-sm">

@@ -20,6 +20,7 @@ import { Toaster } from 'react-hot-toast'
 import ProtectedRoute from './features/ui/ProtectedRoute'
 import ProtectedRouteRole from './features/ui/ProtectRouteRole'
 import HideRoute from './features/ui/HideRoute'
+import PlannedMaintenanceDetailsPage from './pages/plannedMaintenanceDetailsPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
       {
         path: 'assets/:assetId',
         element: <AssetDetailsPage />,
+      },
+      {
+        path: 'assets/:assetId/plannedMaintenance',
+        element: <PlannedMaintenanceDetailsPage />,
       },
       {
         path: 'about',
