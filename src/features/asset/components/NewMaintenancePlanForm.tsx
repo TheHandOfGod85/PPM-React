@@ -40,7 +40,7 @@ export default function NewMaintenancePlanForm({
       <div className="container mx-auto max-w-[1000px] px-2">
         <h1 className="title">Set plan</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="join join-vertical  w-full gap-5">
+          <div className="flex flex-col w-full gap-1">
             <FormInputField
               //   disabled={isCreating}
               label="Select a starting date"
