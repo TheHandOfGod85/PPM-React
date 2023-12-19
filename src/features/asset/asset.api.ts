@@ -79,3 +79,7 @@ interface AddNewTaskValues {
 export async function addTask(input: AddNewTaskValues, assetId: string) {
   await api.post(`/assets/${assetId}/planned-maintenance/addTask`, input)
 }
+
+export async function deleteTask(assetId: string, taskId: string) {
+  await api.post(`/assets/${assetId}/${taskId}/deleteTask`)
+}

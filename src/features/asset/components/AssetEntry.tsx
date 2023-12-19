@@ -33,7 +33,7 @@ export default function AssetEntry({
     )
 
   const generateButtons = () => {
-    if (pathname === `/dashboard/assets/${_id}` && user?.role === 'admin') {
+    if (pathname === `/dashboard/assets/${_id}`) {
       return (
         <div className="flex gap-1">
           <Link
@@ -42,38 +42,42 @@ export default function AssetEntry({
           >
             <FaListCheck />
           </Link>
-          <Modal>
-            <Modal.Open opens={deleteAssetById}>
-              <button className="btn btn-warning btn-sm">
-                <FaTrash />
-              </button>
-            </Modal.Open>
-            <Modal.Window name={deleteAssetById}>
-              <ConfirmPopUp
-                resourceName={name}
-                buttonActionName="delete"
-                onConfirm={() =>
-                  deleteAsset(_id, {
-                    onSuccess: () => {
-                      navigate('/dashboard/assets')
-                    },
-                  })
-                }
-                disabled={isDeleting}
-              />
-            </Modal.Window>
-          </Modal>
+          {user?.role === 'admin' && (
+            <>
+              <Modal>
+                <Modal.Open opens={deleteAssetById}>
+                  <button className="btn btn-warning btn-sm">
+                    <FaTrash />
+                  </button>
+                </Modal.Open>
+                <Modal.Window name={deleteAssetById}>
+                  <ConfirmPopUp
+                    resourceName={name}
+                    buttonActionName="delete"
+                    onConfirm={() =>
+                      deleteAsset(_id, {
+                        onSuccess: () => {
+                          navigate('/dashboard/assets')
+                        },
+                      })
+                    }
+                    disabled={isDeleting}
+                  />
+                </Modal.Window>
+              </Modal>
 
-          <Modal>
-            <Modal.Open opens={editAsset}>
-              <button className="btn btn-info btn-sm">
-                <FaEdit />
-              </button>
-            </Modal.Open>
-            <Modal.Window name={editAsset}>
-              <EditAssetForm />
-            </Modal.Window>
-          </Modal>
+              <Modal>
+                <Modal.Open opens={editAsset}>
+                  <button className="btn btn-info btn-sm">
+                    <FaEdit />
+                  </button>
+                </Modal.Open>
+                <Modal.Window name={editAsset}>
+                  <EditAssetForm />
+                </Modal.Window>
+              </Modal>
+            </>
+          )}
         </div>
       )
     }

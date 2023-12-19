@@ -68,7 +68,7 @@ export default function NewTaskForm({ onCloseModal }: NewAndEditTaskFormProps) {
       <div className="container mx-auto max-w-[1000px] px-2">
         <h1 className="title">Add task</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col w-full gap-1">
+          <div className="flex flex-col w-full gap-2">
             <FormInputField
               disabled={isAddingTask}
               register={register('name')}

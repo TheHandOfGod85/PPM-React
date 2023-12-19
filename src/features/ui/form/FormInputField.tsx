@@ -25,7 +25,7 @@ export default function FormInputField({
           <span className="label-text">{label}</span>
         </label>
       )}
-      <div className="join-vertical">
+      <div className="join join-horizontal">
         {textarea ? (
           <>
             <textarea
@@ -52,12 +52,10 @@ export default function FormInputField({
               aria-describedby={inputGroupElement?.props.id}
             />
             {inputGroupElement}
-            {error && (
-              <p className=" mt-2 ml-2 text-sm text-error">{error?.message}</p>
-            )}
           </>
         )}
       </div>
+      {error && <p className="ml-2 text-sm text-error">{error?.message}</p>}
     </>
   )
 }

@@ -59,7 +59,7 @@ export default function Login() {
           <div className="card relative bg-neutral w-full">
             <div className="card-body">
               <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                <div className="join join-vertical w-full gap-3 mt-2 p-4">
+                <div className="flex flex-col w-full gap-3 mt-2 p-4">
                   <h3 className="card-title text-white">Login</h3>
                   <FormInputField
                     disabled={isPending}
