@@ -83,3 +83,10 @@ export async function addTask(input: AddNewTaskValues, assetId: string) {
 export async function deleteTask(assetId: string, taskId: string) {
   await api.post(`/assets/${assetId}/${taskId}/deleteTask`)
 }
+export async function addTaskNote(
+  assetId: string,
+  taskId: string,
+  note: string
+) {
+  await api.post(`/assets/${assetId}/${taskId}/addNote`, { note })
+}

@@ -1,18 +1,19 @@
+import { BsThreeDotsVertical } from 'react-icons/bs'
+import { CiCircleInfo } from 'react-icons/ci'
+import { FaPlus, FaTrash } from 'react-icons/fa6'
 import { useParams } from 'react-router-dom'
 import NewAndEditMaintenancePlanForm from '../features/asset/components/NewAndEditMaintenancePlanForm'
-import useAsset from '../features/asset/hooks/useAsset'
-import Modal from '../features/ui/Modal'
-import LoadingSpinner from '../features/ui/LoadingSpinner'
-import { formatDate } from '../utils/utils'
-import { CiCircleInfo } from 'react-icons/ci'
-import useToggleCompleteTask from '../features/asset/hooks/useToggleCompletedTask'
 import NewTaskForm from '../features/asset/components/NewTaskForm'
-import { FaTrash } from 'react-icons/fa6'
-import ConfirmPopUp from '../features/ui/ConfirmPopUp'
+import useAsset from '../features/asset/hooks/useAsset'
 import useDeleteTask from '../features/asset/hooks/useDeleteTask'
-import { BsThreeDotsVertical } from 'react-icons/bs'
-import useAuthenticatedUser from '../features/user/hooks/useAuthenticatedUser'
+import useToggleCompleteTask from '../features/asset/hooks/useToggleCompletedTask'
+import ConfirmPopUp from '../features/ui/ConfirmPopUp'
 import GoBackButton from '../features/ui/GoBackButton'
+import LoadingSpinner from '../features/ui/LoadingSpinner'
+import Modal from '../features/ui/Modal'
+import useAuthenticatedUser from '../features/user/hooks/useAuthenticatedUser'
+import { formatDate } from '../utils/utils'
+import AddTaskNoteForm from '../features/asset/components/AddTaskNoteForm'
 
 export default function PlannedMaintenanceDetailsPage() {
   const { assetId } = useParams()
@@ -83,11 +84,16 @@ export default function PlannedMaintenanceDetailsPage() {
           {plannedMaintenance?.tasks?.map((task) => (
             <li key={task._id} className="mb-2">
               <div
-                className={`flex justify-between items-center gap-1 bg-neutral uppercase rounded-lg p-4 max-w-xl mx-auto ${
+                className={`flex justify-between items-center gap-1 bg-neutral uppercase rounded-lg p-4 max-w-xl mx-auto text-white ${
                   task.completed === true ? 'line-through' : ''
                 }`}
               >
-                <p>{task.name}</p>
+                <div className="flex flex-col">
+                  <p>{task.name}</p>
+                  <p className="text-xs text-info">
+                    {task.note ? 'Note: ' + task.note : ''}
+                  </p>
+                </div>
                 <div className="dropdown dropdown-end">
                   <button tabIndex={0} className="btn btn-xs btn-ghost">
                     <BsThreeDotsVertical />
@@ -142,6 +148,16 @@ export default function PlannedMaintenanceDetailsPage() {
                             <h1 className="text-center">Task description</h1>
                             <p className="text-sm">{task.description}</p>
                           </>
+                        </Modal.Window>
+                      </Modal>
+                      <Modal>
+                        <Modal.Open opens={`note-${task._id}`}>
+                          <button className="btn btn-info btn-circle btn-xs">
+                            <FaPlus />
+                          </button>
+                        </Modal.Open>
+                        <Modal.Window name={`note-${task._id}`}>
+                          <AddTaskNoteForm taskId={task._id} />
                         </Modal.Window>
                       </Modal>
                     </div>

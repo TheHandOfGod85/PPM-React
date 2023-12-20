@@ -36,9 +36,9 @@ export default function NewAssetForm({ onCloseModal }: NewAssetFormProps) {
   async function onSubmit(input: CreateAssetFormData) {
     createAsset(input, {
       onSuccess: () => {
-        reset()
         setErrorText(null)
         onCloseModal?.()
+        reset()
       },
       onError: (error) => {
         if (
