@@ -90,3 +90,7 @@ export async function addTaskNote(
 ) {
   await api.post(`/assets/${assetId}/${taskId}/addNote`, { note })
 }
+
+export async function completePlannedMaintenance(assetId: string) {
+  await api.post(`/assets/${assetId}/completePlannedMaintenance`)
+}

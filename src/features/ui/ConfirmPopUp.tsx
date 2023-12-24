@@ -4,6 +4,8 @@ interface ConfirmPopUpProps {
   disabled: boolean
   onCloseModal?: () => void
   buttonActionName: string
+  title?: string
+  description?: string
 }
 export default function ConfirmPopUp({
   disabled,
@@ -11,15 +13,29 @@ export default function ConfirmPopUp({
   onConfirm,
   resourceName,
   buttonActionName,
+  title,
+  description,
 }: ConfirmPopUpProps) {
   return (
     <div className="flex flex-col">
       <h1 className="font-bold text-center text-lg mb-3">
-        Delete {resourceName}
+        {title ? (
+          <>
+            {title} {resourceName}
+          </>
+        ) : (
+          <>Delete {resourceName}</>
+        )}
       </h1>
       <p className="text-sm mb-4">
-        Are you sure you want to delete this {resourceName} permanently? This
-        action cannot be undone.
+        {description ? (
+          description
+        ) : (
+          <>
+            Are you sure you want to delete this {resourceName} permanently?
+            This action cannot be undone.
+          </>
+        )}
       </p>
       <div className="flex justify-end gap-2">
         <button
