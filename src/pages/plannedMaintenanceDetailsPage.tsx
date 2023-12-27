@@ -98,7 +98,13 @@ export default function PlannedMaintenanceDetailsPage() {
                     {task.note ? 'Note: ' + task.note : ''}
                   </p>
                 </div>
-                <div className="dropdown dropdown-end">
+                <div className="flex items-center dropdown dropdown-end">
+                  <div
+                    className="tooltip tooltip-bottom tooltip-info hover:cursor-pointer"
+                    data-tip={task.description}
+                  >
+                    <CiCircleInfo />
+                  </div>
                   <button tabIndex={0} className="btn btn-xs btn-ghost">
                     <BsThreeDotsVertical />
                   </button>
@@ -141,19 +147,6 @@ export default function PlannedMaintenanceDetailsPage() {
                           })
                         }
                       />
-                      <Modal>
-                        <Modal.Open opens={`info-${task._id}`}>
-                          <button className="btn btn-info btn-circle btn-xs">
-                            <CiCircleInfo />
-                          </button>
-                        </Modal.Open>
-                        <Modal.Window name={`info-${task._id}`}>
-                          <>
-                            <h1 className="text-center">Task description</h1>
-                            <p className="text-sm">{task.description}</p>
-                          </>
-                        </Modal.Window>
-                      </Modal>
                       <Modal>
                         <Modal.Open opens={`note-${task._id}`}>
                           <button className="btn btn-info btn-circle btn-xs">
