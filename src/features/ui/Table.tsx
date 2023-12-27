@@ -9,7 +9,9 @@ import { ReactNode } from 'react'
 function Table({ children, style }: { children: ReactNode; style?: string }) {
   return (
     // <TableContext.Provider >
-    <table className={`table ${style}`}>{children}</table>
+    <div className="overflow-x-auto">
+      <table className={`table ${style}`}>{children}</table>
+    </div>
     // </TableContext.Provider>
   )
 }
