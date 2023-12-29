@@ -34,6 +34,11 @@ export default function PlannedMaintenanceDetailsPage() {
     ({ _id, completed, ...rest }) => rest
   )
 
+  // Check if plannedMaintenance exists and if its startDate is less than the current date
+  const isOverdue =
+    plannedMaintenance?.startDate &&
+    new Date(plannedMaintenance.startDate) < new Date()
+
   if (isLoading) {
     return <LoadingSpinner />
   } else {
@@ -63,6 +68,11 @@ export default function PlannedMaintenanceDetailsPage() {
               <>
                 Next maintenance date{' '}
                 {formatDate(plannedMaintenance?.startDate)}
+                {isOverdue && (
+                  <span className="badge badge-error badge-xs ml-2">
+                    Overdue
+                  </span>
+                )}
               </>
             ) : (
               <p>
