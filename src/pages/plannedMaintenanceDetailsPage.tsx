@@ -1,6 +1,7 @@
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { CiCircleInfo } from 'react-icons/ci'
 import { FaPlus, FaTrash } from 'react-icons/fa6'
+import { HiOutlineFolderDownload } from 'react-icons/hi'
 import { useNavigate, useParams } from 'react-router-dom'
 import NewAndEditMaintenancePlanForm from '../features/asset/components/NewAndEditMaintenancePlanForm'
 import NewTaskForm from '../features/asset/components/NewTaskForm'
@@ -15,6 +16,7 @@ import useAuthenticatedUser from '../features/user/hooks/useAuthenticatedUser'
 import { formatDate } from '../utils/utils'
 import AddTaskNoteForm from '../features/asset/components/AddTaskNoteForm'
 import useCompletePlannedMaintenance from '../features/asset/hooks/useCompletePlannedMaintenance'
+import { CSVLink } from 'react-csv'
 
 export default function PlannedMaintenanceDetailsPage() {
   const { assetId } = useParams()
@@ -26,6 +28,11 @@ export default function PlannedMaintenanceDetailsPage() {
   const { completeMaintenance, isCompleting } = useCompletePlannedMaintenance()
 
   const { plannedMaintenance } = asset
+
+  const tasksToDownload = plannedMaintenance?.tasks?.map(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ({ _id, completed, id, ...rest }) => rest
+  )
 
   if (isLoading) {
     return <LoadingSpinner />
@@ -116,9 +123,14 @@ export default function PlannedMaintenanceDetailsPage() {
                       {user?.role === 'admin' && (
                         <Modal>
                           <Modal.Open opens={`delete-task-${task._id}`}>
-                            <button className="btn btn-warning btn-xs">
-                              <FaTrash />
-                            </button>
+                            <div
+                              className="tooltip tooltip-info"
+                              data-tip="Delete task"
+                            >
+                              <button className="btn btn-warning btn-xs">
+                                <FaTrash />
+                              </button>
+                            </div>
                           </Modal.Open>
                           <Modal.Window name={`delete-task-${task._id}`}>
                             <ConfirmPopUp
@@ -135,23 +147,36 @@ export default function PlannedMaintenanceDetailsPage() {
                           </Modal.Window>
                         </Modal>
                       )}
-
-                      <input
-                        className="checkbox checkbox-success checkbox-sm"
-                        type="checkbox"
-                        checked={task?.completed}
-                        onChange={() =>
-                          toggleComplete({
-                            assetId: assetId as string,
-                            taskId: task._id,
-                          })
+                      <div
+                        className="tooltip tooltip-info"
+                        data-tip={
+                          task.completed
+                            ? 'Uncheck complete task'
+                            : 'Complete task'
                         }
-                      />
+                      >
+                        <input
+                          className="checkbox checkbox-success checkbox-sm"
+                          type="checkbox"
+                          checked={task?.completed}
+                          onChange={() =>
+                            toggleComplete({
+                              assetId: assetId as string,
+                              taskId: task._id,
+                            })
+                          }
+                        />
+                      </div>
                       <Modal>
                         <Modal.Open opens={`note-${task._id}`}>
-                          <button className="btn btn-info btn-circle btn-xs">
-                            <FaPlus />
-                          </button>
+                          <div
+                            className="tooltip tooltip-info"
+                            data-tip="Add note, edit or send blank to delete"
+                          >
+                            <button className="btn btn-info btn-circle btn-xs">
+                              <FaPlus />
+                            </button>
+                          </div>
                         </Modal.Open>
                         <Modal.Window name={`note-${task._id}`}>
                           <AddTaskNoteForm taskId={task._id} />
@@ -186,6 +211,9 @@ export default function PlannedMaintenanceDetailsPage() {
               />
             </Modal.Window>
           </Modal>
+          <CSVLink className="btn btn-ghost btn-sm" data={tasksToDownload}>
+            <HiOutlineFolderDownload size="30px" />
+          </CSVLink>
           <GoBackButton href={`/dashboard/assets/${assetId}`} />
         </div>
       </div>

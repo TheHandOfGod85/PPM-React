@@ -112,7 +112,7 @@ export default function NewAndEditMaintenancePlanForm({
   return (
     <>
       <div className="container mx-auto max-w-[1000px] px-2">
-        <h1 className="title">Set plan</h1>
+        <h1 className="title">{isEditMode ? 'Edit plan' : 'Set plan'}</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col w-full gap-1">
             <FormInputField
