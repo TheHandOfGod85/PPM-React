@@ -31,7 +31,7 @@ export default function PlannedMaintenanceDetailsPage() {
 
   const tasksToDownload = plannedMaintenance?.tasks?.map(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ({ _id, completed, id, ...rest }) => rest
+    ({ _id, completed, ...rest }) => rest
   )
 
   if (isLoading) {
